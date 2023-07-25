@@ -11,7 +11,7 @@ class c_data_item {
 /**
  * 改这个值，整个存档都会重置
  */
-const VERSION = 1;
+const VERSION = 11;
 (function (c_data_item) {
     /**
      * 所有具体记录
@@ -38,7 +38,8 @@ const VERSION = 1;
         key: `list_reccord_${VERSION}`,
         def_val: [
             {
-                id: 1
+                id: 1,
+                name: `圆角矩形【1】`
             }
         ]
     });

@@ -4,7 +4,7 @@ import c_sdk_core_electron from "./c_sdk_core_electron.js";
 /**
  * 针对不同运行环境做兼容处理
  */
-class c_sdk {
+class _c_sdk {
 
     /**
      * 当前策略
@@ -20,11 +20,11 @@ class c_sdk {
     }
 }
 
-namespace c_sdk {
+namespace _c_sdk {
     /**
      * 全局实例
      */
-    export const inst = new c_sdk ();
+    export const inst = new _c_sdk ();
 }
 
-export default c_sdk;
+exports.c_sdk = _c_sdk;

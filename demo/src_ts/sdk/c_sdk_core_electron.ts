@@ -1,25 +1,25 @@
 import c_sdk_core from "./c_sdk_core.js";
 import c_sdk_ctx_get from "./c_sdk_ctx_get.js";
 import c_sdk_ctx_set from "./c_sdk_ctx_set.js";
-import d_modules from "./d_modules.js";
+import c_modules from "../c_modules.js";
 
 /**
  * 存档路径
  */
-const STORAGE_PATH = d_modules.path.join (`c_sdk_core_electron_storage.json`);
+const STORAGE_PATH = c_modules.path.join (`c_sdk_core_electron_storage.json`);
 
 /**
  * 针对不同运行环境做兼容处理 - 策略 - electron
  */
-export default class c_sdk_core_electron extends c_sdk_core {
+class _c_sdk_core_electron extends c_sdk_core {
 
     set (txt: string): Promise<c_sdk_ctx_set> {
-        let folder = d_modules.path.dirname (STORAGE_PATH);
+        let folder = c_modules.path.dirname (STORAGE_PATH);
         return Promise.resolve ()
             // 检查文件目录是否存在
             .then (() => {
                 return new Promise ((resolve) => {
-                    d_modules.fs.stat (
+                    c_modules.fs.stat (
                         folder,
                         (err, stat) => {
                             if (err) {
@@ -37,7 +37,7 @@ export default class c_sdk_core_electron extends c_sdk_core {
                     return;
                 };
                 return new Promise ((resolve, reject) => {
-                    d_modules.fs.mkdir (
+                    c_modules.fs.mkdir (
                         folder,
                         {
                             recursive: true
@@ -55,12 +55,11 @@ export default class c_sdk_core_electron extends c_sdk_core {
             // 正式写入文件
             .then (() => {
                 return new Promise<c_sdk_ctx_set> ((resolve, reject) => {
-                    d_modules.fs.writeFile (STORAGE_PATH, txt, (err) => {
+                    c_modules.fs.writeFile (STORAGE_PATH, txt, (err) => {
                         if (err) {
                             reject (err);
                             return;
                         };
-                        console.log (`存档成功`, STORAGE_PATH);
                         resolve ({
                             is_successed: true
                         });
@@ -78,7 +77,7 @@ export default class c_sdk_core_electron extends c_sdk_core {
 
     get (): Promise<c_sdk_ctx_get> {
         return new Promise ((resolve) => {
-            d_modules.fs.readFile (
+            c_modules.fs.readFile (
                 STORAGE_PATH, 
                 (err, data) => {
                     if (err) {
@@ -97,3 +96,5 @@ export default class c_sdk_core_electron extends c_sdk_core {
         });
     }
 }
+
+exports.c_sdk_core_electron = _c_sdk_core_electron;

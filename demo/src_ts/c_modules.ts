@@ -1,15 +1,19 @@
 const react = require (`../node_modules/react/index.js`);
 const react_dom_client = require (`../node_modules/react-dom/client.js`);
+const InfiniteScroll = require ("../node_modules/react-infinite-scroll-component/dist/index.js");
 const antd = require (`../node_modules/antd/dist/antd.js`);
 const fs = require (`fs`);
 const path = require (`path`);
+const electron = require (`electron`);
 
-const d_modules = {
+const _c_modules = {
     react,
     react_dom_client,
+    InfiniteScroll,
     antd,
     fs,
-    path
+    path,
+    electron
 };
 
-export default d_modules;
+exports.c_modules = _c_modules;

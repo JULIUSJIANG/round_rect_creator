@@ -1,10 +1,10 @@
-import c_data_item from "./c_data_item.js";
-import c_sdk from "./c_sdk.js";
+const {c_data_item} = require (`./c_data_item.js`);
+const {c_sdk} = require (`../sdk/c_sdk.js`);
 
 /**
  * 数据管理
  */
-class c_data {
+class _c_data {
     /**
      * 真正的数据，存储在这里
      */
@@ -51,8 +51,9 @@ class c_data {
      * @param item 
      * @param t 
      */
-    f_set<T> (item: c_data_item <T>, t: T) {
+    f_set<T> (item: any, t: T) {
         this._data [item.key] = t;
+        this.f_call_data_change ();
     }
 
     /**
@@ -60,7 +61,7 @@ class c_data {
      * @param item 
      * @returns 
      */
-    f_get<T> (item: c_data_item <T>): T {
+    f_get<T> (item: any): T {
         return this._data [item.key];
     }
 
@@ -71,13 +72,26 @@ class c_data {
     f_save () {
         return c_sdk.inst.core.set (JSON.stringify (this._data, null, 1));
     }
+
+    /**
+     * 数据版本
+     */
+    data_version = 0;
+    /**
+     * 通知数据发生变化
+     */
+    f_call_data_change () {
+        ++this.data_version;
+    }
 }
 
-namespace c_data {
+namespace _c_data {
     /**
      * 全局实例
      */
-    export const inst = new c_data ();
+    export const inst = new _c_data ();
 }
 
-export default c_data;
+exports.default = _c_data;
+exports.c_data = _c_data;
+export default _c_data;

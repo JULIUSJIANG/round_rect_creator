@@ -1,5 +1,5 @@
 import c_data_item from "./c_data_item.js";
-import c_sdk from "./c_sdk.js";
+import c_sdk from "../sdk/c_sdk.js";
 /**
  * 数据管理
  */
@@ -9,6 +9,10 @@ class c_data {
          * 真正的数据，存储在这里
          */
         this._data = {};
+        /**
+         * 数据版本
+         */
+        this.data_version = 0;
     }
     /**
      * 初始化
@@ -55,6 +59,7 @@ class c_data {
      */
     f_set(item, t) {
         this._data[item.key] = t;
+        this.f_call_data_change();
     }
     /**
      * 取记录
@@ -70,6 +75,12 @@ class c_data {
      */
     f_save() {
         return c_sdk.inst.core.set(JSON.stringify(this._data, null, 1));
+    }
+    /**
+     * 通知数据发生变化
+     */
+    f_call_data_change() {
+        ++this.data_version;
     }
 }
 (function (c_data) {

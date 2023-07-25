@@ -1,7 +1,7 @@
 /**
  * c_sdk_core.get 执行结果
  */
-export default interface c_sdk_ctx_get {
+interface _c_sdk_ctx_get {
     /**
      * 执行成功
      */
@@ -11,3 +11,5 @@ export default interface c_sdk_ctx_get {
      */
     txt: string;
 }
+
+exports.c_sdk_ctx_get = _c_sdk_ctx_get;
