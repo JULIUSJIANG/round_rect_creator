@@ -14,7 +14,8 @@ class c_dom_left extends c_modules.react.Component {
                 style: {
                     [c_dom_define.s_flex]: "400px",
                     [c_dom_define.s_flex_grow]: 0,
-                    [c_dom_define.s_margin]: c_dom_define.d_spacing,
+                    [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
+                    [c_dom_define.s_padding]: c_dom_define.d_spacing_half,
                     [c_dom_define.s_background_color]: c_dom_define.d_bg_color,
                     
                     [c_dom_define.s_display]: c_dom_define.s_display_flex,

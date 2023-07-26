@@ -14,8 +14,7 @@ class c_dom_right_preview extends c_modules.react.Component {
                 style: {
                     [c_dom_define.s_height]: c_dom_define.s_height_percentage_0,
                     [c_dom_define.s_flex_grow]: 1,
-                    [c_dom_define.s_margin]: c_dom_define.d_spacing,
-                    [c_dom_define.s_margin_top]: 0,
+                    [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
                     [c_dom_define.s_background_color]: c_dom_define.d_bg_color,
 
                     [c_dom_define.s_display]: c_dom_define.s_display_flex,

@@ -35,6 +35,11 @@ Promise.resolve()
 })
     // 自动 update
     .then(() => {
+    // 没存档的话，新建一个
+    if (c_data.inst.f_get(c_data_item.list_reccord).length == 0) {
+        c_index_client.f_add_record();
+    }
+    ;
     // 关闭窗口时候自动存档一次
     window.addEventListener(`beforeunload`, () => {
         c_index_client.f_fetch(c_request.client_fetch_log, {
@@ -73,6 +78,36 @@ c_modules.electron.ipcRenderer.on(c_request.EVT_NAME_SERVER_ACTIVE, (evt, args) 
 class c_index_client {
 }
 (function (c_index_client) {
+    /**
+     * 新建记录
+     */
+    function f_add_record() {
+        let list_record = c_data.inst.f_get(c_data_item.list_reccord);
+        let record_id = c_data.inst.f_get(c_data_item.seed_record) + 1;
+        c_data.inst.f_set(c_data_item.seed_record, record_id);
+        list_record.push({
+            id: record_id,
+            name: `圆角矩形【${record_id}】`,
+            radius_lt: 50,
+            radius_rt: 50,
+            radius_lb: 50,
+            radius_rb: 50,
+            margin_top: 0,
+            margin_right: 0,
+            margin_bottom: 0,
+            margin_left: 0,
+            min_size_width: 200,
+            min_size_height: 200,
+            color: "88888888",
+            serration: 10,
+            current_code: 0,
+            code_1_line_width: 2,
+            code_2_fade_distance: 25,
+            code_3_fade_distance: 25
+        });
+        c_data.inst.f_set(c_data_item.current_edit_record_id, record_id);
+    }
+    c_index_client.f_add_record = f_add_record;
     /**
      * 获取当前编辑的存档
      * @returns

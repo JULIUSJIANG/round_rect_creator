@@ -6,6 +6,7 @@ namespace c_dom_define {
     // 标签
     export const t_div = "div";
     export const t_canvas = "canvas";
+    export const t_span = "span";
 
     // 样式
     export const s_width = "width";
@@ -19,6 +20,7 @@ namespace c_dom_define {
     export const s_display = "display";
     export const s_display_flex = "flex";
     export const s_display_block = "block";
+    export const s_display_none = "none";
 
     export const s_flex_direction = "flexDirection";
     export const s_flex_direction_column = "column";
@@ -45,6 +47,20 @@ namespace c_dom_define {
     export const s_overflow_y_hidden = "hidden";
     export const s_overflow_y_scroll = "scroll";
 
+    export const s_align_items = "alignItems";
+    export const s_align_items_center = "center";
+
+    export const s_justify_content = "justifyContent";
+    export const s_justify_content_center = "center";
+
+    export const s_class_name = "className";
+
+    export const s_font_size = "fontSize";
+    export const s_font_size_14 = "14px";
+
+    export const p_value = "value";
+    export const p_on_change = "onChange";
+
     /**
      * 内边距
      */
@@ -57,6 +73,10 @@ namespace c_dom_define {
      * 内边距 - 一半
      */
     export const d_spacing_half = "4px";
+    /**
+     * 内边距 - 2 倍
+     */
+    export const d_spacing_double = "16px";
     /**
      * 分块的背景颜色
      */

@@ -1,71 +1,46 @@
 {
- "version_12": 12,
- "seed_record_12": 81,
- "list_reccord_12": [
+ "seed_record_16": 2,
+ "list_reccord_16": [
   {
-   "id": 48,
-   "name": "圆角矩形【48】"
+   "id": 1,
+   "name": "圆角矩形【1】",
+   "radius_lt": 50,
+   "radius_rt": 50,
+   "radius_lb": 50,
+   "radius_rb": 50,
+   "margin_top": 0,
+   "margin_right": 0,
+   "margin_bottom": 0,
+   "margin_left": 0,
+   "min_size_width": 200,
+   "min_size_height": 100,
+   "color": "88888888",
+   "serration": 10,
+   "current_code": 0,
+   "code_1_line_width": 2,
+   "code_2_fade_distance": 25,
+   "code_3_fade_distance": 25
   },
   {
-   "id": 49,
-   "name": "圆角矩形【49】aa好了"
-  },
-  {
-   "id": 50,
-   "name": "圆角矩形【50】"
-  },
-  {
-   "id": 51,
-   "name": "圆角矩形【51】"
-  },
-  {
-   "id": 52,
-   "name": "圆角矩形【52】"
-  },
-  {
-   "id": 53,
-   "name": "圆角矩形【53】"
-  },
-  {
-   "id": 54,
-   "name": "圆角矩形【54】"
-  },
-  {
-   "id": 55,
-   "name": "圆角矩形【55】"
-  },
-  {
-   "id": 56,
-   "name": "圆角矩形【56】"
-  },
-  {
-   "id": 57,
-   "name": "圆角矩形【57】"
-  },
-  {
-   "id": 58,
-   "name": "圆角矩形【58】"
-  },
-  {
-   "id": 59,
-   "name": "圆角矩形【59】"
-  },
-  {
-   "id": 60,
-   "name": "圆角矩形【60】"
-  },
-  {
-   "id": 61,
-   "name": "圆角矩形【61】"
-  },
-  {
-   "id": 62,
-   "name": "圆角矩形【62】"
-  },
-  {
-   "id": 63,
-   "name": "圆角矩形【63】"
+   "id": 2,
+   "name": "圆角矩形【2】",
+   "radius_lt": 50,
+   "radius_rt": 50,
+   "radius_lb": 50,
+   "radius_rb": 50,
+   "margin_top": 0,
+   "margin_right": 0,
+   "margin_bottom": 0,
+   "margin_left": 0,
+   "min_size_width": 200,
+   "min_size_height": 200,
+   "color": "88888888",
+   "serration": 10,
+   "current_code": 0,
+   "code_1_line_width": 2,
+   "code_2_fade_distance": 25,
+   "code_3_fade_distance": 25
   }
  ],
- "current_edit_record_id_12": 58
+ "current_edit_record_id_16": 1
 }

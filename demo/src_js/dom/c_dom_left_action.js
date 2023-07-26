@@ -1,3 +1,4 @@
+import c_index_client from "../c_index_client.js";
 import c_modules from "../c_modules.js";
 import c_data from "../data/c_data.js";
 import c_data_item from "../data/c_data_item.js";
@@ -11,21 +12,14 @@ class c_dom_left_action extends c_modules.react.Component {
             style: {
                 [c_dom_define.s_flex_grow]: 0,
                 [c_dom_define.s_padding]: c_dom_define.d_spacing_half,
-                [c_dom_define.s_margin]: c_dom_define.d_spacing,
+                [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
                 [c_dom_define.s_background_color]: c_dom_define.d_bg_color,
                 [c_dom_define.s_display]: c_dom_define.s_display_flex,
                 [c_dom_define.s_flex_direction]: c_dom_define.s_flex_direction_column
             }
         }, c_modules.react.createElement(c_modules.antd.Button, {
             onClick: () => {
-                let list_record = c_data.inst.f_get(c_data_item.list_reccord);
-                let record_id = c_data.inst.f_get(c_data_item.seed_record) + 1;
-                c_data.inst.f_set(c_data_item.seed_record, record_id);
-                list_record.push({
-                    id: record_id,
-                    name: `圆角矩形【${record_id}】`
-                });
-                c_data.inst.f_set(c_data_item.current_edit_record_id, record_id);
+                c_index_client.f_add_record();
             },
             style: {
                 margin: c_dom_define.d_spacing_half
