@@ -1,6 +1,7 @@
 import c_config from "../c_config.js";
 import c_modules from "../c_modules.js";
 import c_dom_right_setting from "./c_dom_right_setting.js";
+import c_dom_right_preview from "./c_dom_right_preview.js";
 
 /**
  * 右边栏
@@ -21,10 +22,38 @@ class c_dom_right extends c_modules.react.Component {
             },
 
             c_modules.react.createElement (
-                c_dom_right_setting,
+                "div",
                 {
+                    style: {
+                        display: "flex",
+                        flexDirection: "column",
+                        flexGrow: 1,
+                        height: "100%",
+                        border: c_config.BLOCK_BORDER,
+                        backgroundColor: c_config.BLOCK_BG_COLOR
+                    }
+                },
 
-                }
+                c_modules.react.createElement (
+                    c_dom_right_setting,
+                    {
+    
+                    }
+                ),
+                c_modules.react.createElement (
+                    "div",
+                    {
+                        style: {
+                            paddingTop: c_config.SPACING
+                        }
+                    }
+                ),
+                c_modules.react.createElement (
+                    c_dom_right_preview,
+                    {
+                        
+                    }
+                )
             )
         );
     }

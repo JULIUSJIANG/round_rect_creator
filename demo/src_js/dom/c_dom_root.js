@@ -27,7 +27,8 @@ class c_dom_root extends c_modules.react.Component {
     render() {
         return c_modules.react.createElement(c_modules.antd.Row, {
             style: {
-                height: `100%`
+                height: `100%`,
+                flexWrap: "nowrap"
             },
             gutter: [
                 0,
@@ -46,7 +47,7 @@ class c_dom_root extends c_modules.react.Component {
         }), c_modules.react.createElement(c_dom_right, {}), c_modules.react.createElement("div", {
             height: "100%",
             style: {
-                paddingLeft: c_config.SPACING
+                paddingleft: c_config.SPACING
             }
         }));
     }

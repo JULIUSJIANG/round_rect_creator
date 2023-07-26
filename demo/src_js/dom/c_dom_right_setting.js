@@ -17,7 +17,7 @@ class c_dom_right_setting extends c_modules.react.Component {
                 border: c_config.BLOCK_BORDER,
                 backgroundColor: c_config.BLOCK_BG_COLOR
             }
-        }, c_modules.react.createElement(c_dom_right_setting_radius_padding, {}), c_modules.react.createElement(c_dom_right_type, {}));
+        }, c_modules.react.createElement(c_dom_right_setting_radius_padding, {}), c_modules.react.createElement(c_dom_right_type, {}), c_modules.react.createElement(c_dom_right_type, {}));
     }
 }
 export default c_dom_right_setting;

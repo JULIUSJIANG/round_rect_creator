@@ -16,16 +16,7 @@ class c_dom_left extends c_modules.react.Component {
                 paddingTop: c_config.SPACING,
                 paddingBottom: c_config.SPACING
             }
-        }, 
-        // c_modules.react.createElement (
-        //     "div",
-        //     {
-        //         style: {
-        //             padding: c_config.SPACING_HALF
-        //         }
-        //     }
-        // ),
-        c_modules.react.createElement("div", {
+        }, c_modules.react.createElement("div", {
             style: {
                 display: "flex",
                 flexDirection: "column",

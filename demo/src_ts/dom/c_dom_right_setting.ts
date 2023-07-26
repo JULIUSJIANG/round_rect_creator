@@ -35,6 +35,12 @@ class c_dom_right_setting extends c_modules.react.Component {
                 {
 
                 }
+            ),
+            c_modules.react.createElement (
+                c_dom_right_type,
+                {
+
+                }
             )
         );
     }

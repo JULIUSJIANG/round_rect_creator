@@ -38,7 +38,8 @@ class c_dom_root extends c_modules.react.Component {
             c_modules.antd.Row, 
             {
                 style: {
-                    height: `100%`
+                    height: `100%`,
+                    flexWrap: "nowrap"
                 },
                 gutter: [
                     0,
