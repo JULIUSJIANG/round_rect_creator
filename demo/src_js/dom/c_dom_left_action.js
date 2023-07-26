@@ -1,19 +1,20 @@
 import c_modules from "../c_modules.js";
 import c_data from "../data/c_data.js";
 import c_data_item from "../data/c_data_item.js";
-import c_config from "../c_config.js";
+import c_dom_define from "./c_dom_define.js";
 /**
  * 根 - 行为导航栏
  */
 class c_dom_left_action extends c_modules.react.Component {
     render() {
-        return c_modules.react.createElement("div", {
+        return c_modules.react.createElement(c_dom_define.t_div, {
             style: {
-                padding: c_config.SPACING_HALF
-            }
-        }, c_modules.react.createElement("div", {
-            style: {
-                display: "flex"
+                [c_dom_define.s_flex_grow]: 0,
+                [c_dom_define.s_padding]: c_dom_define.d_spacing_half,
+                [c_dom_define.s_margin]: c_dom_define.d_spacing,
+                [c_dom_define.s_background_color]: c_dom_define.d_bg_color,
+                [c_dom_define.s_display]: c_dom_define.s_display_flex,
+                [c_dom_define.s_flex_direction]: c_dom_define.s_flex_direction_column
             }
         }, c_modules.react.createElement(c_modules.antd.Button, {
             onClick: () => {
@@ -26,15 +27,10 @@ class c_dom_left_action extends c_modules.react.Component {
                 });
                 c_data.inst.f_set(c_data_item.current_edit_record_id, record_id);
             },
-            block: true,
             style: {
-                margin: c_config.SPACING_HALF
+                margin: c_dom_define.d_spacing_half
             }
-        }, `新建`)), c_modules.react.createElement("div", {
-            style: {
-                display: "flex"
-            }
-        }, c_modules.react.createElement(c_modules.antd.Button, {
+        }, `新建`), c_modules.react.createElement(c_modules.antd.Button, {
             onClick: () => {
                 let list_record = c_data.inst.f_get(c_data_item.list_reccord);
                 let edit_id = c_data.inst.f_get(c_data_item.current_edit_record_id);
@@ -58,11 +54,10 @@ class c_dom_left_action extends c_modules.react.Component {
                 }
                 ;
             },
-            block: true,
             style: {
-                margin: c_config.SPACING_HALF
+                margin: c_dom_define.d_spacing_half
             }
-        }, `删除`)));
+        }, `删除`));
     }
 }
 export default c_dom_left_action;

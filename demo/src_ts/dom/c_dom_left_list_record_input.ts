@@ -53,7 +53,10 @@ export default class c_dom_left_list_record_input extends c_modules.react.Compon
                 className: "ant-input css-dev-only-do-not-override-1jr9qlj",
                 ref: this.inputRef,
                 type: "text",
-                ...commonProps
+                ...commonProps,
+                style: {
+                    ...this.props.style
+                }
             }
         );
     }

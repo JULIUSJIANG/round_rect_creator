@@ -1,7 +1,7 @@
-import c_config from "../c_config.js";
 import c_modules from "../c_modules.js";
 import c_dom_left from "./c_dom_left.js";
 import c_dom_right from "./c_dom_right.js";
+import c_dom_define from "./c_dom_define.js";
 
 /**
  * 根
@@ -34,58 +34,36 @@ class c_dom_root extends c_modules.react.Component {
     }
 
     render () {
+        // 把容器转为 flex 排版
         return c_modules.react.createElement (
-            c_modules.antd.Row, 
+            c_dom_define.t_div,
             {
                 style: {
-                    height: `100%`,
-                    flexWrap: "nowrap"
-                },
-                gutter: [
-                    0,
-                    0
-                ]
+                    [c_dom_define.s_width]: c_dom_define.s_width_percentage_100,
+                    [c_dom_define.s_height]: c_dom_define.s_height_percentage_100,
+
+                    [c_dom_define.s_display]: c_dom_define.s_display_flex,
+                    [c_dom_define.s_flex_direction]: c_dom_define.s_flex_direction_column
+                }
             },
 
+            // 最外层背景
             c_modules.react.createElement (
-                "div",
+                c_dom_define.t_div,
                 {
-                    height: "100%",
                     style: {
-                        paddingLeft: c_config.SPACING
-                    }
-                }
-            ),
-            c_modules.react.createElement (
-                c_dom_left,
-                {
+                        [c_dom_define.s_height]: c_dom_define.s_height_percentage_0,
+                        [c_dom_define.s_flex_grow]: 1,
+                        [c_dom_define.s_margin]: c_dom_define.d_spacing,
+                        [c_dom_define.s_background_color]: c_dom_define.d_bg_color,
 
-                }
-            ),
-            c_modules.react.createElement (
-                "div",
-                {
-                    height: "100%",
-                    style: {
-                        paddingLeft: c_config.SPACING
+                        [c_dom_define.s_display]: c_dom_define.s_display_flex
                     }
-                }
-            ),
-            c_modules.react.createElement (
-                c_dom_right,
-                {
+                },
 
-                }
-            ),
-            c_modules.react.createElement (
-                "div",
-                {
-                    height: "100%",
-                    style: {
-                        paddingleft: c_config.SPACING
-                    }
-                }
-            ),
+                c_modules.react.createElement (c_dom_left),
+                c_modules.react.createElement (c_dom_right)
+            )
         );
     }
 }
