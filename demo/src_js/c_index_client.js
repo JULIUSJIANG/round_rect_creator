@@ -4,9 +4,6 @@ import c_sdk from "./sdk/c_sdk.js";
 import c_modules from "./c_modules.js";
 import c_data_item from "./data/c_data_item.js";
 import c_request from "./c_request.js";
-const { c_a } = require(`./c_a.js`);
-let i_a = new c_a();
-console.log(`客户都安构造了 c_a...`, i_a.id);
 Promise.resolve()
     // 等待文档加载成功
     .then(() => {
@@ -24,17 +21,27 @@ Promise.resolve()
     console.log(`c_data init...`);
     return c_data.inst.f_init();
 })
-    // 渲染画面
+    // 初始化渲染器
     .then(() => {
     console.log(`c_render init...`);
     return c_render.inst.f_init();
 })
+    // 告知服务端已就绪
     .then(() => {
-    return c_index_client.f_fetch(c_request.client_fetch_ready, {
-        txt: `client_ready`
+    // 跟服务端说，我已经就绪了
+    return c_index_client.f_fetch(c_request.client_fetch_log, {
+        txt: `客户端就绪...`
     });
 })
+    // 自动 update
     .then(() => {
+    // 关闭窗口时候自动存档一次
+    window.addEventListener(`beforeunload`, () => {
+        c_index_client.f_fetch(c_request.client_fetch_log, {
+            txt: `客户端关闭...`
+        });
+        c_data.inst.f_save();
+    });
     // 上一帧数据版本
     let last_data_version;
     // 更新
@@ -63,7 +70,8 @@ c_modules.electron.ipcRenderer.on(c_request.EVT_NAME_SERVER_ACTIVE, (evt, args) 
         c_modules.electron.ipcRenderer.send(c_request.EVT_NAME_SERVER_ACTIVE, resp);
     });
 });
-var c_index_client;
+class c_index_client {
+}
 (function (c_index_client) {
     /**
      * 获取当前编辑的存档

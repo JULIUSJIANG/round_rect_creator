@@ -1,12 +1,12 @@
+import c_config from "../c_config.js";
 import c_modules from "../c_modules.js";
 import c_dom_left from "./c_dom_left.js";
 import c_dom_right from "./c_dom_right.js";
-import c_config from "../c_config.js";
 
 /**
  * 根
  */
-class _c_dom_root extends c_modules.react.Component {
+class c_dom_root extends c_modules.react.Component {
 
     constructor (...args) {
         super (...args);
@@ -47,9 +47,27 @@ class _c_dom_root extends c_modules.react.Component {
             },
 
             c_modules.react.createElement (
+                "div",
+                {
+                    height: "100%",
+                    style: {
+                        paddingLeft: c_config.SPACING
+                    }
+                }
+            ),
+            c_modules.react.createElement (
                 c_dom_left,
                 {
 
+                }
+            ),
+            c_modules.react.createElement (
+                "div",
+                {
+                    height: "100%",
+                    style: {
+                        paddingLeft: c_config.SPACING
+                    }
                 }
             ),
             c_modules.react.createElement (
@@ -57,9 +75,18 @@ class _c_dom_root extends c_modules.react.Component {
                 {
 
                 }
-            )
+            ),
+            c_modules.react.createElement (
+                "div",
+                {
+                    height: "100%",
+                    style: {
+                        paddingleft: c_config.SPACING
+                    }
+                }
+            ),
         );
     }
 }
 
-exports.c_dom_root = _c_dom_root;
+export default c_dom_root;

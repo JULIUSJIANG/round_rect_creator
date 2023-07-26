@@ -7,7 +7,7 @@ const STORAGE_PATH = c_modules.path.join(`c_sdk_core_electron_storage.json`);
 /**
  * 针对不同运行环境做兼容处理 - 策略 - electron
  */
-export default class c_sdk_core_electron extends c_sdk_core {
+class c_sdk_core_electron extends c_sdk_core {
     set(txt) {
         let folder = c_modules.path.dirname(STORAGE_PATH);
         return Promise.resolve()
@@ -85,3 +85,4 @@ export default class c_sdk_core_electron extends c_sdk_core {
         });
     }
 }
+export default c_sdk_core_electron;

@@ -4,12 +4,7 @@ import c_sdk from "./sdk/c_sdk.js";
 import c_modules from "./c_modules.js";
 import c_data_item from "./data/c_data_item.js";
 import c_data_item_ctx_record from "./data/c_data_item_ctx_record.js";
-const {c_request} = require (`./c_request.js`);
-
-const {c_a} = require (`./c_a.js`);
-
-let i_a = new c_a ();
-console.log (`客户都安构造了 c_a...`, i_a.id);
+import c_request from "./c_request.js";
 
 Promise.resolve ()
     // 等待文档加载成功
@@ -28,20 +23,34 @@ Promise.resolve ()
         console.log (`c_data init...`);
         return c_data.inst.f_init ();
     })
-    // 渲染画面
+    // 初始化渲染器
     .then (() => {
         console.log (`c_render init...`);
         return c_render.inst.f_init ();
     })
+    // 告知服务端已就绪
     .then (() => {
+        // 跟服务端说，我已经就绪了
         return c_index_client.f_fetch (
-            c_request.client_fetch_ready,
+            c_request.client_fetch_log,
             {
-                txt: `client_ready`
+                txt: `客户端就绪...`
             }
         );
     })
+    // 自动 update
     .then (() => {
+        // 关闭窗口时候自动存档一次
+        window.addEventListener (`beforeunload`, () => {
+            c_index_client.f_fetch (
+                c_request.client_fetch_log,
+                {
+                    txt: `客户端关闭...`
+                }
+            );
+            c_data.inst.f_save ();
+        });
+
         // 上一帧数据版本
         let last_data_version: number;
         // 更新
@@ -64,7 +73,7 @@ c_modules.electron.ipcRenderer.on (
     c_request.EVT_NAME_SERVER_ACTIVE,
     (
         evt,
-        args: c_request.c_ctx
+        args: any
     ) => 
     {
         // 解析得到具体策略
@@ -78,13 +87,17 @@ c_modules.electron.ipcRenderer.on (
     }
 );
 
-namespace _c_index_client {
+class c_index_client {
+
+}
+
+namespace c_index_client {
     /**
      * 获取当前编辑的存档
      * @returns 
      */
     export function f_get_current_record () {
-        let list_record = c_data.inst.f_get (c_data_item.list_reccord);
+        let list_record = c_data.inst.f_get (c_data_item.list_reccord) as any;
         let current_record: c_data_item_ctx_record;
         for (let i = 0; i < list_record.length; i++) {
             let list_record_i = list_record [i];
@@ -102,7 +115,7 @@ namespace _c_index_client {
      * @param i 
      */
     export function f_fetch <c_i, c_o> (
-        action: c_request <c_i, c_o>,
+        action: any,
         i: c_i
     ) 
     {
@@ -126,4 +139,4 @@ namespace _c_index_client {
     }
 };
 
-exports.c_index_client = _c_index_client;
+export default c_index_client;

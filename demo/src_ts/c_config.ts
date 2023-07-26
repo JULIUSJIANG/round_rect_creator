@@ -1,4 +1,4 @@
-namespace _c_config {
+namespace c_config {
     /**
      * 内边距
      */
@@ -14,7 +14,11 @@ namespace _c_config {
     /**
      * 分块的描边
      */
-    export const BLOCK_BORDER = "1px dashed black"
+    export const BLOCK_BORDER = "0px dashed green";
+    /**
+     * 分块的背景颜色
+     */
+    export const BLOCK_BG_COLOR = "#00000008";
 };
 
-exports.c_config = _c_config;
+export default c_config;

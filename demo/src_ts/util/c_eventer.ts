@@ -1,7 +1,7 @@
 /**
  * 事件派发器
  */
-class _c_eventer<T> {
+class c_eventer<T> {
     /**
      * 监听 id 生成器
      */
@@ -42,4 +42,4 @@ class _c_eventer<T> {
     }
 }
 
-exports.c_eventer = _c_eventer;
+export default c_eventer;

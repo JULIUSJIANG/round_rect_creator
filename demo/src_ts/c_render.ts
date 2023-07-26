@@ -1,12 +1,10 @@
-import c_data from "./data/c_data.js";
-import c_data_item from "./data/c_data_item.js";
 import c_modules from "./c_modules.js";
 import c_dom_root from "./dom/c_dom_root.js";
 
 /**
  * 渲染管理器
  */
-class _c_render {
+class c_render {
     /**
      * 界面的根节点
      */
@@ -39,11 +37,11 @@ class _c_render {
     }
 }
 
-namespace _c_render {
+namespace c_render {
     /**
      * 全局实例
      */
     export const inst = new c_render ();
 }
 
-exports.c_render = _c_render;
+export default c_render;

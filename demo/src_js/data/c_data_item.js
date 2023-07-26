@@ -11,7 +11,7 @@ class c_data_item {
 /**
  * 改这个值，整个存档都会重置
  */
-const VERSION = 11;
+const VERSION = 12;
 (function (c_data_item) {
     /**
      * 所有具体记录

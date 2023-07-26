@@ -1,10 +1,9 @@
-// import c_index_server from "./c_index_server.js";
-const {c_data} = require (`./data/c_data.js`);
+import c_data from "./data/c_data.js";
 
 /**
  * 异步请求
  */
-class _c_request<c_i, c_o> {
+class c_request<c_i, c_o> {
     /**
      * 代号
      */
@@ -26,7 +25,7 @@ class _c_request<c_i, c_o> {
     }
 }
 
-namespace _c_request {
+namespace c_request {
     /**
      * 请求体
      */
@@ -53,49 +52,21 @@ namespace _c_request {
     /**
      * 代号到具体策略的映射
      */
-    export const map_code_to_request: Map <number, _c_request <unknown, unknown>> = new Map ();
+    export const map_code_to_request: Map <number, c_request <unknown, unknown>> = new Map ();
 
-    export interface client_fetch_ready_i {
-
+    export interface client_fetch_log_i {
+        txt: string
     };
-    export interface client_fetch_ready_o {
-
-    };
-    /**
-     * 客户端通知 - 已就绪
-     */
-    export const client_fetch_ready = new _c_request <client_fetch_ready_i, client_fetch_ready_o> ({
-        code: 1001,
-        analyse: (i) => {
-            // c_index_server.ctrl_ready.resolve (null);
-            return Promise.resolve ({
-
-            });
-        }
-    });
-
-    export interface server_fetch_will_close_i {
-
-    };
-    export interface server_fetch_will_close_o {
+    export interface client_fetch_log_o {
 
     };
     /**
-     * 服务端通知 - 即将关闭
+     * 客户端通知 - 打印日志
      */
-    export const server_fetch_will_close = new _c_request <server_fetch_will_close_i, server_fetch_will_close_o> ({
-        code: 2001,
-        analyse: (i) => {
-            return Promise.resolve ()
-                // 关闭前保存一次
-                .then (() => {
-                    return c_data.inst.f_save ();
-                })  
-                .then (() => {
-                    return {};
-                });
-        }
+    export const client_fetch_log = new c_request <client_fetch_log_i, client_fetch_log_o> ({
+        code: 1002,
+        analyse: null
     });
 }
 
-exports.c_request = _c_request;
+export default c_request;

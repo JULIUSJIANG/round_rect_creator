@@ -1,7 +1,7 @@
 /**
  * 可控式进程
  */
-class _c_promise <c_t> {
+class c_promise <c_t> {
     /**
      * 实质进程
      */
@@ -33,4 +33,4 @@ class _c_promise <c_t> {
     }
 }
 
-exports.c_promise = _c_promise;
+export default c_promise;

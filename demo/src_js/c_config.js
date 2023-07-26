@@ -15,7 +15,11 @@ var c_config;
     /**
      * 分块的描边
      */
-    c_config.BLOCK_BORDER = "1px dashed black";
+    c_config.BLOCK_BORDER = "0px dashed green";
+    /**
+     * 分块的背景颜色
+     */
+    c_config.BLOCK_BG_COLOR = "#00000008";
 })(c_config || (c_config = {}));
 ;
 export default c_config;

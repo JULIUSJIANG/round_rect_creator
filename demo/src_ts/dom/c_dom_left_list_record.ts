@@ -1,13 +1,13 @@
 import c_modules from "../c_modules.js";
 import c_data from "../data/c_data.js";
 import c_data_item from "../data/c_data_item.js";
-import c_render from "../c_render.js"
 import c_config from "../c_config.js";
+import c_dom_left_list_record_input from "./c_dom_left_list_record_input.js";
 
 /**
  * 根 - 存档列表
  */
-class _c_dom_left_list_record extends c_modules.react.Component {
+class c_dom_left_list_record extends c_modules.react.Component {
 
     render () {
         let list_children: Array <any> = new Array ();
@@ -42,11 +42,12 @@ class _c_dom_left_list_record extends c_modules.react.Component {
                     },
 
                     c_modules.react.createElement (
-                        c_modules.antd.Input,
+                        c_dom_left_list_record_input,
                         {
-                            defaultValue: list_record_i.name,
+                            value: list_record_i.name,
                             onChange: (e) => {
-                                console.log (`onChange`, e.target.value);
+                                list_record_i.name = e;
+                                c_data.inst.f_call_data_change ();
                             }
                         }
                     )
@@ -61,7 +62,7 @@ class _c_dom_left_list_record extends c_modules.react.Component {
                         c_modules.antd.Button,
                         props_btn,
 
-                        `编辑`
+                        `编辑样式`
                     )
                 )
             ))
@@ -70,11 +71,14 @@ class _c_dom_left_list_record extends c_modules.react.Component {
             "div",
             {
                 style: {
-                    flexGrow: 1,
+                    flex: "auto",
                     overflowY: "auto",
                     overflowX: "hidden",
+                    marginLeft: c_config.SPACING,
+                    marginRight: c_config.SPACING,
                     padding: c_config.SPACING,
                     border: c_config.BLOCK_BORDER,
+                    backgroundColor: c_config.BLOCK_BG_COLOR,
 
                     display: "flex",
                     flexDirection: "column"
@@ -92,11 +96,11 @@ class _c_dom_left_list_record extends c_modules.react.Component {
                         overflowX: "hidden",
                     }
                 },
-    
+
                 ...list_children
             )
         );
     }
 }
 
-exports.c_dom_left_list_record = _c_dom_left_list_record;
+export default c_dom_left_list_record;

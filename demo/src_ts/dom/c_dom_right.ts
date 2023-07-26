@@ -1,13 +1,11 @@
 import c_config from "../c_config.js";
 import c_modules from "../c_modules.js";
-import c_data from "../data/c_data.js";
-import c_data_item from "../data/c_data_item.js";
 import c_dom_right_setting from "./c_dom_right_setting.js";
 
 /**
  * 右边栏
  */
-class _c_dom_right extends c_modules.react.Component {
+class c_dom_right extends c_modules.react.Component {
     render () {
         return c_modules.react.createElement (
             c_modules.antd.Col,
@@ -32,4 +30,4 @@ class _c_dom_right extends c_modules.react.Component {
     }
 }
 
-exports.c_dom_right = _c_dom_right;
+export default c_dom_right;

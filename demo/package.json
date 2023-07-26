@@ -5,7 +5,7 @@
   "main": "src_js/c_index_server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "chcp 65001 tsc && electron-forge start",
+    "start": "chcp 65001 && tsc && electron-forge start",
     "package": "electron-forge package",
     "make": "tsc && electron-forge make"
   },
