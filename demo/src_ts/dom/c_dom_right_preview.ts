@@ -27,6 +27,11 @@ class c_dom_right_preview extends c_modules.react.Component {
      */
     webgl_program: WebGLProgram;
     /**
+     * 大图的 rt
+     */
+    big_img_rt: WebGLTexture;
+
+    /**
      * 顶点位置
      */
     a_v_position = new c_webgl_ctx_props (
@@ -316,6 +321,7 @@ void main () {
         this.u_code_1_line_width.f_init (this.webgl_ctx, this.webgl_program);
         this.u_code_2_fade_distance.f_init (this.webgl_ctx, this.webgl_program);
         this.u_code_3_fade_distance.f_init (this.webgl_ctx, this.webgl_program);
+        this.big_img_rt = this.webgl_ctx.createTexture ();
         this.componentDidUpdate ();
     }
 
@@ -346,6 +352,9 @@ void main () {
         this.u_code_3_fade_distance.f_fill (record.code_3_fade_distance);
         this.webgl_ctx.blendFunc (this.webgl_ctx.SRC_ALPHA, this.webgl_ctx.ONE_MINUS_SRC_ALPHA);
         this.webgl_ctx.enable (this.webgl_ctx.BLEND);
+        
+        
+
         this.webgl_ctx.bindFramebuffer (this.webgl_ctx.FRAMEBUFFER, null);
         this.webgl_ctx.drawElements (this.webgl_ctx.TRIANGLES, 6, this.webgl_ctx.UNSIGNED_BYTE, 0);
         window ["webgl_ctx"] = this.webgl_ctx;
