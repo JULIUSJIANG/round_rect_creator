@@ -1,5 +1,6 @@
 const _electron = require (`electron`);
-const {app, BrowserWindow} = _electron;
+const {app, BrowserWindow, dialog} = _electron;
+const path = require (`path`);
 
 /**
  * 异步请求
@@ -71,9 +72,68 @@ namespace c_request {
             return Promise.resolve ({});
         }
     });
+
+    export interface client_fetch_save_i {
+        /**
+         * 文件名
+         */
+        file_name: string;
+        /**
+         * 文件数据
+         */
+        file_url: string;
+    };
+    export interface client_fetch_save_o {
+
+    };
+    export const client_fetch_save = new c_request <client_fetch_save_i, client_fetch_save_o> ({
+        code: 1003,
+        analyse: (ctx) => {
+            let filters = [
+                {
+                    name: `全部文件`,
+                    extensions: [
+                        `*`
+                    ]
+                }
+            ];
+            let ext = path.extname (ctx.file_name);
+            if (ext && ext !== `.`) {
+                const name = ext.slice (1, ext.length);
+                if (name) {
+                    filters.unshift ({
+                        name: ``,
+                        extensions: [
+                            name
+                        ]
+                    });
+                };
+            };
+
+            return Promise.resolve ()
+                .then (() => {
+                    return dialog.showSaveDialog (
+                        win,
+                        {
+                            title: `另存为`,
+                            filters,
+                            defaultPath: ctx.file_name
+                        }
+                    );
+                })
+                .then ((result) => {
+                    file_path = result.filePath;
+                    if (file_path) {
+                        win.webContents.downloadURL (ctx.file_url);
+                    };
+                    return {};
+                });
+        }
+    });
 }
 
 let win;
+let file_path: string;
 const createWindow = () => {
     win = new BrowserWindow ({
         webPreferences: {
@@ -84,6 +144,16 @@ const createWindow = () => {
     win.maximize();
     win.loadFile (`./src_js/c_index_client.html`);
     win.webContents.openDevTools ();
+
+    win.webContents.session.on (
+        'will-download', 
+        (event, item, webContents) => {
+        if (!file_path) {
+            return;
+        };
+        //设置下载项的保存文件路径
+        item.setSavePath(file_path);
+    });
 }
 
 Promise.resolve ()

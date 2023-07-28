@@ -31,5 +31,11 @@ class c_request {
         code: 1002,
         analyse: null
     });
+    ;
+    ;
+    c_request.client_fetch_save = new c_request({
+        code: 1003,
+        analyse: null
+    });
 })(c_request || (c_request = {}));
 export default c_request;

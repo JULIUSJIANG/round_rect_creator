@@ -3,6 +3,7 @@ import c_modules from "../c_modules.js";
 import c_data from "../data/c_data.js";
 import c_data_item from "../data/c_data_item.js";
 import c_dom_define from "./c_dom_define.js";
+import c_request from "../c_request.js";
 
 /**
  * 根 - 行为导航栏
@@ -53,7 +54,7 @@ class c_dom_left_action extends c_modules.react.Component {
                         };
                         list_record.splice (edit_idx, 1);
                         if (list_record.length == 0) {
-                            c_data.inst.f_set (c_data_item.current_edit_record_id, null);
+                            c_index_client.f_add_record ();
                         }
                         else {
                             edit_idx = Math.min (edit_idx, list_record.length - 1);
@@ -66,7 +67,27 @@ class c_dom_left_action extends c_modules.react.Component {
                 },
     
                 `删除`
-            )
+            ),
+            c_modules.react.createElement (
+                c_modules.antd.Button,
+                {
+                    onClick: () => {
+                        let record = c_index_client.f_get_current_record ();
+                        c_index_client.f_fetch (
+                            c_request.client_fetch_save,
+                            {
+                                file_name: `${record.name}.png`,
+                                file_url: c_index_client.data_url
+                            }
+                        );
+                    },
+                    style: {
+                        margin: c_dom_define.d_spacing_half
+                    }
+                },
+    
+                `导出 png`
+            ),
         );
     }
 }

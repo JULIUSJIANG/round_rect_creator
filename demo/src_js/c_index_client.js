@@ -99,11 +99,13 @@ class c_index_client {
             min_size_width: 200,
             min_size_height: 200,
             color: "88888888",
-            serration: 10,
+            serration: 4,
             current_code: 0,
             code_1_line_width: 2,
             code_2_fade_distance: 25,
-            code_3_fade_distance: 25
+            code_2_speed_offset: 0,
+            code_3_fade_distance: 25,
+            code_3_speed_offset: 0
         });
         c_data.inst.f_set(c_data_item.current_edit_record_id, record_id);
     }

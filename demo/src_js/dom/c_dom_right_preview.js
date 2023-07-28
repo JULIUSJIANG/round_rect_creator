@@ -14,7 +14,11 @@ class c_dom_right_preview extends c_modules.react.Component {
         /**
          * 实例引用
          */
-        this.canvas_ref = c_modules.react.createRef();
+        this.webgl_canvas_ref = c_modules.react.createRef();
+        /**
+         * 2d canvas 引用
+         */
+        this.d2_canvas_ref = c_modules.react.createRef();
         /**
          * 顶点位置
          */
@@ -60,9 +64,17 @@ class c_dom_right_preview extends c_modules.react.Component {
          */
         this.rr_u_code_2_fade_distance = new c_webgl_ctx_props(`u_code_2_fade_distance`, c_webgl_rs_origin.t_uniform, c_webgl_rs_type.t_float);
         /**
+         * 向内淡出 - 淡出速度
+         */
+        this.rr_u_code_2_speed = new c_webgl_ctx_props(`u_code_2_speed`, c_webgl_rs_origin.t_uniform, c_webgl_rs_type.t_float);
+        /**
          * 向内淡入 - 淡入距离
          */
         this.rr_u_code_3_fade_distance = new c_webgl_ctx_props(`u_code_3_fade_distance`, c_webgl_rs_origin.t_uniform, c_webgl_rs_type.t_float);
+        /**
+         * 向内淡出 - 淡入速度
+         */
+        this.rr_u_code_3_speed = new c_webgl_ctx_props(`u_code_3_speed`, c_webgl_rs_origin.t_uniform, c_webgl_rs_type.t_float);
         /**
          * 顶点位置
          */
@@ -89,8 +101,10 @@ class c_dom_right_preview extends c_modules.react.Component {
         this.img_u_img_tex = new c_webgl_ctx_props(`u_img_tex`, c_webgl_rs_origin.t_uniform, c_webgl_rs_type.t_2d);
     }
     componentDidMount() {
-        this.webgl_canvas = this.canvas_ref.current;
+        this.webgl_canvas = this.webgl_canvas_ref.current;
         this.webgl_ctx = this.webgl_canvas.getContext(`webgl`);
+        this.d2_canvas = this.d2_canvas_ref.current;
+        this.d2_ctx = this.d2_canvas.getContext(`2d`);
         this.webgl_program_round_rect = c_webgl.f_create_program(this.webgl_ctx, `
 precision mediump float;
 ${this.rr_a_v_position.f_get_txt_define()}
@@ -104,7 +118,9 @@ ${this.rr_u_color.f_get_txt_define()}
 ${this.rr_u_current_code.f_get_txt_define()}
 ${this.rr_u_code_1_line_width.f_get_txt_define()}
 ${this.rr_u_code_2_fade_distance.f_get_txt_define()}
+${this.rr_u_code_2_speed.f_get_txt_define()}
 ${this.rr_u_code_3_fade_distance.f_get_txt_define()}
+${this.rr_u_code_3_speed.f_get_txt_define()}
 void main () {
     gl_Position = ${this.rr_a_v_position.name};
     ${this.rr_v_f_position.name} = (gl_Position.xy * 0.5 + vec2 (0.5)) * ${this.rr_u_f_size.name};
@@ -122,7 +138,9 @@ ${this.rr_u_color.f_get_txt_define()}
 ${this.rr_u_current_code.f_get_txt_define()}
 ${this.rr_u_code_1_line_width.f_get_txt_define()}
 ${this.rr_u_code_2_fade_distance.f_get_txt_define()}
+${this.rr_u_code_2_speed.f_get_txt_define()}
 ${this.rr_u_code_3_fade_distance.f_get_txt_define()}
+${this.rr_u_code_3_speed.f_get_txt_define()}
 float code_0_opacity () {
     return 1.0;
 }
@@ -130,10 +148,14 @@ float code_1_opacity (float border_distance) {
     return step (border_distance, ${this.rr_u_code_1_line_width.name});
 }
 float code_2_opacity (float border_distance) {
-    return 1.0 - clamp (border_distance / ${this.rr_u_code_2_fade_distance.name}, 0.0, 1.0);
+    float opacity = clamp (border_distance / ${this.rr_u_code_2_fade_distance.name}, 0.0, 1.0);
+    opacity = pow (opacity, pow (2.0, ${this.rr_u_code_2_speed.name}));
+    return 1.0 - opacity;
 }
 float code_3_opacity (float border_distance) {
-    return clamp (border_distance / ${this.rr_u_code_3_fade_distance.name}, 0.0, 1.0);
+    float opacity = clamp (border_distance / ${this.rr_u_code_3_fade_distance.name}, 0.0, 1.0);
+    opacity = pow (opacity, pow (2.0, ${this.rr_u_code_3_speed.name}));
+    return opacity;
 }
 
 // 计算坐标点到边缘的距离
@@ -251,7 +273,9 @@ void main () {
         this.rr_u_current_code.f_init(this.webgl_ctx, this.webgl_program_round_rect);
         this.rr_u_code_1_line_width.f_init(this.webgl_ctx, this.webgl_program_round_rect);
         this.rr_u_code_2_fade_distance.f_init(this.webgl_ctx, this.webgl_program_round_rect);
+        this.rr_u_code_2_speed.f_init(this.webgl_ctx, this.webgl_program_round_rect);
         this.rr_u_code_3_fade_distance.f_init(this.webgl_ctx, this.webgl_program_round_rect);
+        this.rr_u_code_3_speed.f_init(this.webgl_ctx, this.webgl_program_round_rect);
         this.rr_vertex_location = this.webgl_ctx.getAttribLocation(this.webgl_program_round_rect, this.rr_a_v_position.name);
         this.webgl_program_img = c_webgl.f_create_program(this.webgl_ctx, `
 precision mediump float;
@@ -310,8 +334,8 @@ void main () {
         this.big_img_rt = this.webgl_ctx.createTexture();
         this.webgl_ctx.activeTexture(this.webgl_ctx.TEXTURE0);
         this.webgl_ctx.bindTexture(this.webgl_ctx.TEXTURE_2D, this.big_img_rt);
-        this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_MIN_FILTER, this.webgl_ctx.LINEAR);
-        this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_MAG_FILTER, this.webgl_ctx.LINEAR_MIPMAP_LINEAR);
+        this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_MIN_FILTER, this.webgl_ctx.NEAREST);
+        this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_MAG_FILTER, this.webgl_ctx.NEAREST);
         this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_WRAP_S, this.webgl_ctx.CLAMP_TO_EDGE);
         this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_WRAP_T, this.webgl_ctx.CLAMP_TO_EDGE);
         this.big_img_fbo = this.webgl_ctx.createFramebuffer();
@@ -321,19 +345,16 @@ void main () {
     }
     componentDidUpdate() {
         let record = c_index_client.f_get_current_record();
-        // 当前没有可用存档，清除画面
-        if (!record) {
-            this.webgl_ctx.bindFramebuffer(this.webgl_ctx.FRAMEBUFFER, null);
-            this.webgl_ctx.clear(this.webgl_ctx.COLOR_BUFFER_BIT);
-            return;
-        }
-        ;
         let width = Math.max(record.radius_lt + record.radius_rt, record.radius_lb + record.radius_rb, record.min_size_width);
         let height = Math.max(record.radius_lt + record.radius_lb, record.radius_rt + record.radius_rb, record.min_size_height);
-        let file_width = width + record.margin_left + record.margin_right;
-        let file_height = height + record.margin_top + record.margin_bottom;
-        this.webgl_canvas.width = file_width;
-        this.webgl_canvas.height = file_height;
+        let serration_width = Math.ceil(width * record.serration);
+        let serration_height = Math.ceil(height * record.serration);
+        let file_width = Math.ceil(width + record.margin_left + record.margin_right);
+        let file_height = Math.ceil(height + record.margin_top + record.margin_bottom);
+        let with_margin_width = Math.ceil(file_width * record.serration);
+        let with_margin_height = Math.ceil(file_height * record.serration);
+        this.webgl_canvas.width = with_margin_width;
+        this.webgl_canvas.height = with_margin_height;
         // 把圆角矩形绘制到帧缓冲区
         this.webgl_ctx.useProgram(this.webgl_program_round_rect);
         this.rr_u_f_size.f_fill([width, height]);
@@ -346,36 +367,93 @@ void main () {
         this.rr_u_current_code.f_fill(record.current_code);
         this.rr_u_code_1_line_width.f_fill(record.code_1_line_width);
         this.rr_u_code_2_fade_distance.f_fill(record.code_2_fade_distance);
+        this.rr_u_code_2_speed.f_fill(record.code_2_speed_offset);
         this.rr_u_code_3_fade_distance.f_fill(record.code_3_fade_distance);
+        this.rr_u_code_3_speed.f_fill(record.code_3_speed_offset);
         this.webgl_ctx.bindBuffer(this.webgl_ctx.ARRAY_BUFFER, this.vertex_buffer);
         this.webgl_ctx.vertexAttribPointer(this.rr_vertex_location, 4, this.webgl_ctx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
         this.webgl_ctx.enableVertexAttribArray(this.rr_vertex_location);
         this.webgl_ctx.activeTexture(this.webgl_ctx.TEXTURE0);
         this.webgl_ctx.bindTexture(this.webgl_ctx.TEXTURE_2D, this.big_img_rt);
-        let serration_width = Math.ceil(width * record.serration);
-        let serration_height = Math.ceil(height * record.serration);
         this.webgl_ctx.texImage2D(this.webgl_ctx.TEXTURE_2D, 0, this.webgl_ctx.RGBA, serration_width, serration_height, 0, this.webgl_ctx.RGBA, this.webgl_ctx.getExtension('OES_texture_half_float').HALF_FLOAT_OES, null);
+        this.webgl_ctx.bindFramebuffer(this.webgl_ctx.FRAMEBUFFER, this.big_img_fbo);
+        this.webgl_ctx.framebufferTexture2D(this.webgl_ctx.FRAMEBUFFER, this.webgl_ctx.COLOR_ATTACHMENT0, this.webgl_ctx.TEXTURE_2D, this.big_img_rt, 0);
         this.webgl_ctx.blendFunc(this.webgl_ctx.SRC_ALPHA, this.webgl_ctx.ONE_MINUS_SRC_ALPHA);
         this.webgl_ctx.enable(this.webgl_ctx.BLEND);
-        this.webgl_ctx.bindFramebuffer(this.webgl_ctx.FRAMEBUFFER, this.big_img_fbo);
         this.webgl_ctx.viewport(0, 0, serration_width, serration_height);
         this.webgl_ctx.clear(this.webgl_ctx.COLOR_BUFFER_BIT);
         this.webgl_ctx.drawElements(this.webgl_ctx.TRIANGLES, 6, this.webgl_ctx.UNSIGNED_BYTE, 0);
         // 把帧缓冲区绘制到屏幕
-        this.webgl_ctx.useProgram(this.webgl_program_img);
-        this.img_u_f_file_size.f_fill([file_width, file_height]);
-        this.img_u_img_pos.f_fill([record.margin_left, record.margin_bottom]);
-        this.img_u_img_size.f_fill([width, height]);
-        this.img_u_img_tex.f_fill(0);
-        this.webgl_ctx.bindBuffer(this.webgl_ctx.ARRAY_BUFFER, this.vertex_buffer);
-        this.webgl_ctx.vertexAttribPointer(this.img_vertex_location, 4, this.webgl_ctx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
-        this.webgl_ctx.enableVertexAttribArray(this.img_vertex_location);
-        this.webgl_ctx.blendFunc(this.webgl_ctx.SRC_ALPHA, this.webgl_ctx.ONE_MINUS_SRC_ALPHA);
-        this.webgl_ctx.enable(this.webgl_ctx.BLEND);
-        this.webgl_ctx.bindFramebuffer(this.webgl_ctx.FRAMEBUFFER, null);
-        this.webgl_ctx.viewport(0, 0, file_width, file_height);
-        this.webgl_ctx.clear(this.webgl_ctx.COLOR_BUFFER_BIT);
-        this.webgl_ctx.drawElements(this.webgl_ctx.TRIANGLES, 6, this.webgl_ctx.UNSIGNED_BYTE, 0);
+        let draw = (target) => {
+            this.webgl_ctx.useProgram(this.webgl_program_img);
+            this.img_u_f_file_size.f_fill([with_margin_width, with_margin_height]);
+            this.img_u_img_pos.f_fill([record.margin_left * record.serration, record.margin_bottom * record.serration]);
+            this.img_u_img_size.f_fill([serration_width, serration_height]);
+            this.img_u_img_tex.f_fill(0);
+            this.webgl_ctx.bindBuffer(this.webgl_ctx.ARRAY_BUFFER, this.vertex_buffer);
+            this.webgl_ctx.vertexAttribPointer(this.img_vertex_location, 4, this.webgl_ctx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
+            this.webgl_ctx.enableVertexAttribArray(this.img_vertex_location);
+            this.webgl_ctx.blendFunc(this.webgl_ctx.SRC_ALPHA, this.webgl_ctx.ONE_MINUS_SRC_ALPHA);
+            this.webgl_ctx.enable(this.webgl_ctx.BLEND);
+            this.webgl_ctx.bindFramebuffer(this.webgl_ctx.FRAMEBUFFER, target);
+            this.webgl_ctx.viewport(0, 0, with_margin_width, with_margin_height);
+            this.webgl_ctx.clear(this.webgl_ctx.COLOR_BUFFER_BIT);
+            this.webgl_ctx.drawElements(this.webgl_ctx.TRIANGLES, 6, this.webgl_ctx.UNSIGNED_BYTE, 0);
+        };
+        draw(null);
+        // 克隆屏幕内容
+        let screen_tex = this.webgl_ctx.createTexture();
+        this.webgl_ctx.activeTexture(this.webgl_ctx.TEXTURE1);
+        this.webgl_ctx.bindTexture(this.webgl_ctx.TEXTURE_2D, screen_tex);
+        this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_MIN_FILTER, this.webgl_ctx.NEAREST);
+        this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_MAG_FILTER, this.webgl_ctx.NEAREST);
+        this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_WRAP_S, this.webgl_ctx.CLAMP_TO_EDGE);
+        this.webgl_ctx.texParameteri(this.webgl_ctx.TEXTURE_2D, this.webgl_ctx.TEXTURE_WRAP_T, this.webgl_ctx.CLAMP_TO_EDGE);
+        let fboTextureType = this.webgl_ctx.getExtension('OES_texture_half_float').HALF_FLOAT_OES;
+        this.webgl_ctx.texImage2D(this.webgl_ctx.TEXTURE_2D, 0, this.webgl_ctx.RGBA, with_margin_width, with_margin_height, 0, this.webgl_ctx.RGBA, fboTextureType, null);
+        // 帧缓冲区
+        let fbo = this.webgl_ctx.createFramebuffer();
+        this.webgl_ctx.bindFramebuffer(this.webgl_ctx.FRAMEBUFFER, fbo);
+        this.webgl_ctx.framebufferTexture2D(this.webgl_ctx.FRAMEBUFFER, this.webgl_ctx.COLOR_ATTACHMENT0, this.webgl_ctx.TEXTURE_2D, screen_tex, 0);
+        draw(fbo);
+        // 保存帧缓冲区的数据
+        let fbo_data_float = new Float32Array(serration_width * serration_height * 4);
+        this.webgl_ctx.bindFramebuffer(this.webgl_ctx.FRAMEBUFFER, fbo);
+        this.webgl_ctx.readPixels(0, 0, serration_width, serration_height, this.webgl_ctx.RGBA, this.webgl_ctx.FLOAT, fbo_data_float);
+        let fbo_data_uint = new Uint8Array(file_width * file_height * 4);
+        let r, g, b, a;
+        let serration_volume = record.serration ** 2;
+        for (let x = 0; x < file_width; x++) {
+            for (let y = 0; y < file_height; y++) {
+                r = g = b = a = 0;
+                for (let i_x = 0; i_x < record.serration; i_x++) {
+                    for (let i_y = 0; i_y < record.serration; i_y++) {
+                        let idx_origin = ((y * record.serration + i_y) * with_margin_width + x * record.serration + i_x) * 4;
+                        r += fbo_data_float[idx_origin + 0];
+                        g += fbo_data_float[idx_origin + 1];
+                        b += fbo_data_float[idx_origin + 2];
+                        a += fbo_data_float[idx_origin + 3];
+                    }
+                    ;
+                }
+                ;
+                let idx_target = (y * file_width + x) * 4;
+                fbo_data_uint[idx_target + 0] = list_color[0] * 255;
+                fbo_data_uint[idx_target + 1] = list_color[1] * 255;
+                fbo_data_uint[idx_target + 2] = list_color[2] * 255;
+                fbo_data_uint[idx_target + 3] = a / serration_volume * 255;
+                // fbo_data_uint [idx_target + 3] = Math.max (a / serration_volume * 255, 1);
+            }
+            ;
+        }
+        ;
+        let img_data = this.d2_ctx.createImageData(file_width, file_height);
+        img_data.data.set(fbo_data_uint);
+        this.d2_canvas.width = file_width;
+        this.d2_canvas.height = file_height;
+        this.d2_ctx.clearRect(0, 0, file_width, file_height);
+        this.d2_ctx.putImageData(img_data, 0, 0);
+        c_index_client.data_url = this.d2_canvas.toDataURL('image/png', 1);
         window["webgl_ctx"] = this.webgl_ctx;
     }
     render() {
@@ -400,12 +478,21 @@ void main () {
                 [c_dom_define.s_overflow_y]: c_dom_define.s_overflow_y_scroll
             }
         }, 
-        // 滚动的实体
+        // 源 - 圆角矩形
         c_modules.react.createElement(c_dom_define.t_canvas, {
-            ref: this.canvas_ref,
+            ref: this.webgl_canvas_ref,
             style: {
-                [c_dom_define.s_background_color]: "black",
-                [c_dom_define.s_display]: c_dom_define.s_display_block
+                // [c_dom_define.s_background_color]: "black",
+                [c_dom_define.s_display]: c_dom_define.s_display_none
+            }
+        }), 
+        // 附上边距后的圆角矩形
+        c_modules.react.createElement(c_dom_define.t_canvas, {
+            ref: this.d2_canvas_ref,
+            style: {
+                // [c_dom_define.s_background_color]: "black",
+                [c_dom_define.s_display]: c_dom_define.s_display_block,
+                border: "black 1px dashed"
             }
         })));
     }

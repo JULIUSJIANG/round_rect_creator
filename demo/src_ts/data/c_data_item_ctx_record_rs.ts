@@ -117,8 +117,6 @@ namespace c_data_item_ctx_record_rs {
                     c_dom_define.t_div,
                     {
                         style: {
-                            [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
-    
                             [c_dom_define.s_display]: c_dom_define.s_display_flex,
                             [c_dom_define.s_align_items]: c_dom_define.s_align_items_center,
                             [c_dom_define.s_justify_content]: c_dom_define.s_justify_content_center,
@@ -126,32 +124,108 @@ namespace c_data_item_ctx_record_rs {
                     },
     
                     c_modules.react.createElement (
-                        c_dom_define.t_span,
+                        c_dom_define.t_div,
                         {
-                            style: {
-                                [c_dom_define.s_font_size]: c_dom_define.s_font_size_14,
-                                [c_dom_define.s_margin_left]: c_dom_define.d_spacing,
-                                [c_dom_define.s_margin_right]: c_dom_define.d_spacing
-                            }
-                        },
-                        "淡出距离",
-                    ),
-                    c_modules.react.createElement (
-                        c_modules.antd.InputNumber,
-                        {
-                            min: 0,
                             style: {
                                 [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
-                                [c_dom_define.s_flex_grow]: 1
+                                [c_dom_define.s_flex_grow]: 1,
+                                [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
+        
+                                [c_dom_define.s_display]: c_dom_define.s_display_flex,
+                                [c_dom_define.s_align_items]: c_dom_define.s_align_items_center,
+                                [c_dom_define.s_justify_content]: c_dom_define.s_justify_content_center,
+                            }
+                        },
+        
+                        c_modules.react.createElement (
+                            c_dom_define.t_span,
+                            {
+                                style: {
+                                    [c_dom_define.s_font_size]: c_dom_define.s_font_size_14,
+                                    [c_dom_define.s_margin_left]: c_dom_define.d_spacing,
+                                    [c_dom_define.s_margin_right]: c_dom_define.d_spacing
+                                }
                             },
-
-                            [c_dom_define.p_value]: record.code_2_fade_distance,
-                            [c_dom_define.p_on_change]: (val) => {
-                                record.code_2_fade_distance = val;
-                                c_data.inst.f_call_data_change ();
+                            "淡出距离",
+                        ),
+                        c_modules.react.createElement (
+                            c_modules.antd.InputNumber,
+                            {
+                                min: 0,
+                                style: {
+                                    [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
+                                    [c_dom_define.s_flex_grow]: 1
+                                },
+        
+                                [c_dom_define.p_value]: record.code_2_fade_distance,
+                                [c_dom_define.p_on_change]: (val) => {
+                                    record.code_2_fade_distance = val;
+                                    c_data.inst.f_call_data_change ();
+                                },
+                            }
+                        )
+                    ),
+                    c_modules.react.createElement (
+                        c_dom_define.t_div,
+                        {
+                            style: {
+                                [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
+                                [c_dom_define.s_flex_grow]: 1,
+                                [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
+        
+                                [c_dom_define.s_display]: c_dom_define.s_display_flex,
+                                [c_dom_define.s_align_items]: c_dom_define.s_align_items_center,
+                                [c_dom_define.s_justify_content]: c_dom_define.s_justify_content_center,
+                            }
+                        },
+        
+                        c_modules.react.createElement (
+                            c_dom_define.t_span,
+                            {
+                                style: {
+                                    [c_dom_define.s_font_size]: c_dom_define.s_font_size_14,
+                                    [c_dom_define.s_margin_left]: c_dom_define.d_spacing,
+                                    [c_dom_define.s_margin_right]: c_dom_define.d_spacing_double,
+                                }
                             },
-                        }
-                    )
+                            "淡出变速",
+                        ),
+                        c_modules.react.createElement (
+                            c_modules.antd.Slider,
+                            {
+                                min: -4,
+                                max: 4,
+                                step: 0.01,
+                                style: {
+                                    [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
+                                    [c_dom_define.s_flex_grow]: 1,
+                                    [c_dom_define.s_margin_right]: c_dom_define.d_spacing_double,
+                                },
+        
+                                [c_dom_define.p_value]: record.code_2_speed_offset,
+                                [c_dom_define.p_on_change]: (val) => {
+                                    record.code_2_speed_offset = val;
+                                    c_data.inst.f_call_data_change ();
+                                }
+                            }
+                        ),
+                        c_modules.react.createElement (
+                            c_modules.antd.InputNumber,
+                            {
+                                min: -4,
+                                max: 4,
+                                style: {
+        
+                                },
+        
+                                [c_dom_define.p_value]: record.code_2_speed_offset,
+                                [c_dom_define.p_on_change]: (val) => {
+                                    record.code_2_speed_offset = val;
+                                    c_data.inst.f_call_data_change ();
+                                }
+                            }
+                        ),
+                    ),
                 )
             ];
         }
@@ -169,41 +243,116 @@ namespace c_data_item_ctx_record_rs {
                     c_dom_define.t_div,
                     {
                         style: {
-                            [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
-    
                             [c_dom_define.s_display]: c_dom_define.s_display_flex,
                             [c_dom_define.s_align_items]: c_dom_define.s_align_items_center,
                             [c_dom_define.s_justify_content]: c_dom_define.s_justify_content_center,
                         }
                     },
-    
+
+
                     c_modules.react.createElement (
-                        c_dom_define.t_span,
+                        c_dom_define.t_div,
                         {
-                            style: {
-                                [c_dom_define.s_font_size]: c_dom_define.s_font_size_14,
-                                [c_dom_define.s_margin_left]: c_dom_define.d_spacing,
-                                [c_dom_define.s_margin_right]: c_dom_define.d_spacing
-                            }
-                        },
-                        "淡入距离",
-                    ),
-                    c_modules.react.createElement (
-                        c_modules.antd.InputNumber,
-                        {
-                            min: 0,
                             style: {
                                 [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
-                                [c_dom_define.s_flex_grow]: 1
+                                [c_dom_define.s_flex_grow]: 1,
+                                [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
+        
+                                [c_dom_define.s_display]: c_dom_define.s_display_flex,
+                                [c_dom_define.s_align_items]: c_dom_define.s_align_items_center,
+                                [c_dom_define.s_justify_content]: c_dom_define.s_justify_content_center,
+                            }
+                        },
+        
+                        c_modules.react.createElement (
+                            c_dom_define.t_span,
+                            {
+                                style: {
+                                    [c_dom_define.s_font_size]: c_dom_define.s_font_size_14,
+                                    [c_dom_define.s_margin_left]: c_dom_define.d_spacing,
+                                    [c_dom_define.s_margin_right]: c_dom_define.d_spacing
+                                }
                             },
-
-                            [c_dom_define.p_value]: record.code_3_fade_distance,
-                            [c_dom_define.p_on_change]: (val) => {
-                                record.code_3_fade_distance = val;
-                                c_data.inst.f_call_data_change ();
+                            "淡入距离",
+                        ),
+                        c_modules.react.createElement (
+                            c_modules.antd.InputNumber,
+                            {
+                                min: 0,
+                                style: {
+                                    [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
+                                    [c_dom_define.s_flex_grow]: 1
+                                },
+        
+                                [c_dom_define.p_value]: record.code_3_fade_distance,
+                                [c_dom_define.p_on_change]: (val) => {
+                                    record.code_3_fade_distance = val;
+                                    c_data.inst.f_call_data_change ();
+                                },
+                            }
+                        )
+                    ),
+                    c_modules.react.createElement (
+                        c_dom_define.t_div,
+                        {
+                            style: {
+                                [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
+                                [c_dom_define.s_flex_grow]: 1,
+                                [c_dom_define.s_margin]: c_dom_define.d_spacing_half,
+        
+                                [c_dom_define.s_display]: c_dom_define.s_display_flex,
+                                [c_dom_define.s_align_items]: c_dom_define.s_align_items_center,
+                                [c_dom_define.s_justify_content]: c_dom_define.s_justify_content_center,
+                            }
+                        },
+        
+                        c_modules.react.createElement (
+                            c_dom_define.t_span,
+                            {
+                                style: {
+                                    [c_dom_define.s_font_size]: c_dom_define.s_font_size_14,
+                                    [c_dom_define.s_margin_left]: c_dom_define.d_spacing,
+                                    [c_dom_define.s_margin_right]: c_dom_define.d_spacing_double,
+                                }
                             },
-                        }
-                    )
+                            "淡入变速",
+                        ),
+                        c_modules.react.createElement (
+                            c_modules.antd.Slider,
+                            {
+                                min: -4,
+                                max: 4,
+                                step: 0.01,
+                                style: {
+                                    [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
+                                    [c_dom_define.s_flex_grow]: 1,
+                                    [c_dom_define.s_margin_right]: c_dom_define.d_spacing_double,
+                                },
+        
+                                [c_dom_define.p_value]: record.code_3_speed_offset,
+                                [c_dom_define.p_on_change]: (val) => {
+                                    record.code_3_speed_offset = val;
+                                    c_data.inst.f_call_data_change ();
+                                }
+                            }
+                        ),
+                        c_modules.react.createElement (
+                            c_modules.antd.InputNumber,
+                            {
+                                min: -4,
+                                max: 4,
+                                style: {
+        
+                                },
+        
+                                [c_dom_define.p_value]: record.code_3_speed_offset,
+                                [c_dom_define.p_on_change]: (val) => {
+                                    record.code_3_speed_offset = val;
+                                    c_data.inst.f_call_data_change ();
+                                }
+                            }
+                        ),
+                    ),
                 )
             ];
         }

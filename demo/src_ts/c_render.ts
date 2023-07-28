@@ -29,7 +29,6 @@ class c_render {
      */
     f_refresh () {
         this.version++;
-        console.log (`c_render: 画面刷新[${this.version}]`);
         // 正式渲染
         this._root.render(
             c_modules.react.createElement (c_dom_root)

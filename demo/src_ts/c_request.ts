@@ -67,6 +67,24 @@ namespace c_request {
         code: 1002,
         analyse: null
     });
+
+    export interface client_fetch_save_i {
+        /**
+         * 文件名
+         */
+        file_name: string;
+        /**
+         * 文件数据
+         */
+        file_url: string;
+    };
+    export interface client_fetch_save_o {
+
+    };
+    export const client_fetch_save = new c_request <client_fetch_save_i, client_fetch_save_o> ({
+        code: 1003,
+        analyse: null
+    });
 }
 
 export default c_request;

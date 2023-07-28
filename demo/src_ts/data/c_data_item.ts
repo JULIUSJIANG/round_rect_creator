@@ -30,7 +30,7 @@ class c_data_item<T> {
 /**
  * 改这个值，整个存档都会重置
  */
-const VERSION = 16;
+const VERSION = 17;
 
 namespace c_data_item {
     /**

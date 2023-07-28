@@ -27,8 +27,8 @@ class c_dom_right_size_serration_color extends c_modules.react.Component {
                 [c_dom_define.s_margin_left]: c_dom_define.d_spacing,
                 [c_dom_define.s_margin_right]: c_dom_define.d_spacing
             }
-        }, "最小宽度"), c_modules.react.createElement(c_modules.antd.InputNumber, {
-            min: 0,
+        }, "矩形最小宽度"), c_modules.react.createElement(c_modules.antd.InputNumber, {
+            min: 1,
             style: {
                 [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
                 [c_dom_define.s_flex_grow]: 1
@@ -53,8 +53,8 @@ class c_dom_right_size_serration_color extends c_modules.react.Component {
                 [c_dom_define.s_margin_left]: c_dom_define.d_spacing,
                 [c_dom_define.s_margin_right]: c_dom_define.d_spacing
             }
-        }, "最小高度"), c_modules.react.createElement(c_modules.antd.InputNumber, {
-            min: 0,
+        }, "矩形最小高度"), c_modules.react.createElement(c_modules.antd.InputNumber, {
+            min: 1,
             style: {
                 [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
                 [c_dom_define.s_flex_grow]: 1
@@ -108,8 +108,8 @@ class c_dom_right_size_serration_color extends c_modules.react.Component {
             }
         }, "抗锯齿"), c_modules.react.createElement(c_modules.antd.Slider, {
             min: 1,
-            max: 10,
-            step: 0.01,
+            max: 4,
+            step: 1,
             style: {
                 [c_dom_define.s_width]: c_dom_define.s_width_percentage_0,
                 [c_dom_define.s_flex_grow]: 1,
@@ -117,7 +117,7 @@ class c_dom_right_size_serration_color extends c_modules.react.Component {
             },
             [c_dom_define.p_value]: record.serration,
             [c_dom_define.p_on_change]: (val) => {
-                record.serration = val;
+                record.serration = Number.parseInt(val);
                 c_data.inst.f_call_data_change();
             }
         }), c_modules.react.createElement(c_modules.antd.InputNumber, {

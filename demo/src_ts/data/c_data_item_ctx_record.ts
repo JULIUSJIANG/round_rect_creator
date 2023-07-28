@@ -76,9 +76,17 @@ class c_data_item_ctx_record {
      */
     code_2_fade_distance: number;
     /**
+     * 变速
+     */
+    code_2_speed_offset: number;
+    /**
      * 向内淡入 - 淡入距离
      */
     code_3_fade_distance: number;
+    /**
+     * 变速
+     */
+    code_3_speed_offset: number;
 }
 
 export default c_data_item_ctx_record;

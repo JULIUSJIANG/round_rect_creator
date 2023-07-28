@@ -45,8 +45,8 @@ namespace c_webgl {
      * @returns 
      */
     export function f_create_program (gl: WebGLRenderingContext, shader_v: string, shader_f: string): WebGLProgram {
-        f_log (`shader_v`, shader_v);
-        f_log (`shader_f`, shader_f);
+        // f_log (`shader_v`, shader_v);
+        // f_log (`shader_f`, shader_f);
         let shader_vertex = f_load_shader (gl, gl.VERTEX_SHADER, shader_v);
         let shader_fragment = f_load_shader (gl, gl.FRAGMENT_SHADER, shader_f);
         if (!shader_vertex || !shader_fragment) {

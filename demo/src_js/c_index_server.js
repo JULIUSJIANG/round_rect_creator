@@ -1,5 +1,6 @@
 const _electron = require(`electron`);
-const { app, BrowserWindow } = _electron;
+const { app, BrowserWindow, dialog } = _electron;
+const path = require(`path`);
 /**
  * 异步请求
  */
@@ -36,8 +37,56 @@ class c_request {
             return Promise.resolve({});
         }
     });
+    ;
+    ;
+    c_request.client_fetch_save = new c_request({
+        code: 1003,
+        analyse: (ctx) => {
+            let filters = [
+                {
+                    name: `全部文件`,
+                    extensions: [
+                        `*`
+                    ]
+                }
+            ];
+            let ext = path.extname(ctx.file_name);
+            if (ext && ext !== `.`) {
+                const name = ext.slice(1, ext.length);
+                if (name) {
+                    filters.unshift({
+                        name: ``,
+                        extensions: [
+                            name
+                        ]
+                    });
+                }
+                ;
+            }
+            ;
+            return Promise.resolve()
+                .then(() => {
+                console.log(`选择文件路径...`);
+                return dialog.showSaveDialog(win, {
+                    title: `另存为`,
+                    filters,
+                    defaultPath: ctx.file_name
+                });
+            })
+                .then((result) => {
+                console.log(`保存文件...`);
+                file_path = result.filePath;
+                if (file_path) {
+                    win.webContents.downloadURL(ctx.file_url);
+                }
+                ;
+                return {};
+            });
+        }
+    });
 })(c_request || (c_request = {}));
 let win;
+let file_path;
 const createWindow = () => {
     win = new BrowserWindow({
         webPreferences: {
@@ -48,6 +97,15 @@ const createWindow = () => {
     win.maximize();
     win.loadFile(`./src_js/c_index_client.html`);
     win.webContents.openDevTools();
+    win.webContents.session.on('will-download', (event, item, webContents) => {
+        console.log(`call will-download...`, file_path);
+        if (!file_path) {
+            return;
+        }
+        ;
+        //设置下载项的保存文件路径
+        item.setSavePath(file_path);
+    });
 };
 Promise.resolve()
     // 等待环境就绪

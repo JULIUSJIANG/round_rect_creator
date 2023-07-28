@@ -98,6 +98,11 @@ class c_index_client {
 
 namespace c_index_client {
     /**
+     * 导出的 png 数据
+     */
+    export let data_url: string;
+
+    /**
      * 新建记录
      */
     export function f_add_record () {
@@ -122,13 +127,15 @@ namespace c_index_client {
             min_size_height: 200,
 
             color: "88888888",
-            serration: 10,
+            serration: 4,
 
             current_code: 0,
 
             code_1_line_width: 2,
             code_2_fade_distance: 25,
-            code_3_fade_distance: 25
+            code_2_speed_offset: 0,
+            code_3_fade_distance: 25,
+            code_3_speed_offset: 0
         });
         c_data.inst.f_set (c_data_item.current_edit_record_id, record_id);
     }
@@ -156,7 +163,7 @@ namespace c_index_client {
      * @param i 
      */
     export function f_fetch <c_i, c_o> (
-        action: any,
+        action: c_request <c_i, c_o>,
         i: c_i
     ) 
     {

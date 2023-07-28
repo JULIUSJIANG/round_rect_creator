@@ -28,7 +28,7 @@ namespace c_dom_define {
     export const s_flex_grow = "flexGrow";
 
     export const s_background_color = "backgroundColor";
-
+    
     export const s_margin = "margin";
     export const s_margin_top = "marginTop";
     export const s_margin_right = "marginRight";
