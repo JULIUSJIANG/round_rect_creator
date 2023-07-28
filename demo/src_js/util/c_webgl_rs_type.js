@@ -35,5 +35,14 @@ class c_webgl_rs_type {
             ctx.webgl_ctx.uniform4f(ctx.t_uniform_cache, i_t[0], i_t[1], i_t[2], i_t[3]);
         }
     });
+    /**
+     * 2d 贴图
+     */
+    c_webgl_rs_type.t_2d = new c_webgl_rs_type({
+        name: `sampler2D`,
+        f_uniform_fill: (ctx, i_t) => {
+            ctx.webgl_ctx.uniform1i(ctx.t_uniform_cache, i_t);
+        },
+    });
 })(c_webgl_rs_type || (c_webgl_rs_type = {}));
 export default c_webgl_rs_type;
