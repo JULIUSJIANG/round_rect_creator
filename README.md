@@ -1,10 +1,10 @@
 # 圆角矩形生成器
 
-## 功能说明
+## 工程说明
 
 用户可通过设定颜色、圆角半径等参数定制想要的圆角矩形的 png 格式图片，软件界面如下图所示，h5 版本的体验地址：https://juliusjiang.github.io/round_rect_creator/round_react_creator_h5/build/
 <img width="990" alt="1690663893918" src="https://github.com/JULIUSJIANG/round_rect_creator/assets/33363444/e0851a35-dc55-450d-94d5-02b2b4b29da3">
-
+该工程的实际代码量很少，可作为桌面应用开发、h5 应用开发基础模板的参考
 
 ## 目录说明
 * 工程目录 round_react_creator_electron 放置的是最原始的代码文件，框架为 NodeJS + React + Antd + Electron，用于发布桌面版本
@@ -18,9 +18,9 @@
   
   > round_react_creator_h5 的运行环境为浏览器，没有主进程，所以剔除了主进程的入口文件 IndexMain.ts
   > 
-  > MgrSdkCoreElectron.ts 依赖于 IndexMain.ts，不兼容浏览器环境下的运行，所以用 MgrSdkCoreH5.ts 顶替掉 MgrSdkCoreElectron.ts，兼容浏览器环境
+  > MgrSdkCoreElectron.ts 依赖于 IndexMain.ts，不兼容浏览器环境下的运行，所以用新的策略 MgrSdkCoreH5.ts 顶替掉 MgrSdkCoreElectron.ts
   
-* h5 版本发布以后，index.html 中的 script 标签 src 值的 "/static/js..." 要改成 "./static/js..."，脚本文件的引用才不会出错
+* h5 版本发布以后，index.html 中的 script 标签 src 值的 "/static/js..." 要改成 "./static/js..."，脚本文件的引用才不会出错，页面才能正常运行
 
 
 ## NodeJS基础
