@@ -18,7 +18,7 @@
   
   > round_react_creator_h5 的运行环境为浏览器，没有主进程，所以剔除了主进程的入口文件 IndexMain.ts
   > 
-  > MgrSdkCoreElectron.ts 依赖于 IndexMain.ts，不兼容浏览器环境下的运行，所以用新的策略 MgrSdkCoreH5.ts 顶替掉 MgrSdkCoreElectron.ts
+  > MgrSdkCoreElectron.ts 依赖于 IndexMain.ts，不兼容浏览器环境下的运行，所以用新的策略 MgrSdkCoreH5.ts 顶替掉
   
 * h5 版本发布以后，index.html 中的 script 标签 src 值的 "/static/js..." 要改成 "./static/js..."，脚本文件的引用才不会出错，页面才能正常运行
 
