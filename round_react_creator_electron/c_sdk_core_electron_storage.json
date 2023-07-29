@@ -1,0 +1,50 @@
+{
+ "seed_record_19": 2,
+ "list_reccord_19": [
+  {
+   "id": 1,
+   "name": "圆角矩形【1】",
+   "radiusLT": 50,
+   "radiusRT": 50,
+   "radiusLB": 50,
+   "radiusRB": 50,
+   "marginTop": 0,
+   "marginRight": 0,
+   "marginBottom": 0,
+   "marginLeft": 0,
+   "minSizeWidth": 100,
+   "minSizeHeight": 200,
+   "color": "888888ff",
+   "serration": 4,
+   "currentCode": 0,
+   "code1LineWidth": 2,
+   "code2FadeDistance": 25,
+   "code2SpeedOffset": 0,
+   "code3FadeDistance": 25,
+   "code3SpeedOffset": 0
+  },
+  {
+   "id": 2,
+   "name": "圆角矩形【2】",
+   "radiusLT": 50,
+   "radiusRT": 50,
+   "radiusLB": 50,
+   "radiusRB": 50,
+   "marginTop": 0,
+   "marginRight": 0,
+   "marginBottom": 0,
+   "marginLeft": 0,
+   "minSizeWidth": 200,
+   "minSizeHeight": 200,
+   "color": "888888ff",
+   "serration": 4,
+   "currentCode": 0,
+   "code1LineWidth": 2,
+   "code2FadeDistance": 25,
+   "code2SpeedOffset": 0,
+   "code3FadeDistance": 25,
+   "code3SpeedOffset": 0
+  }
+ ],
+ "current_edit_record_id_19": 1
+}
