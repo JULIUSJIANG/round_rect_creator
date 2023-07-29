@@ -26,6 +26,14 @@ abstract class MgrSdkCore {
      * @param dataUrl 
      */
     abstract saveFile (fileName: string, dataUrl: string): Promise <MgrSdkCtxSaveFile>;
+    /**
+     * 控制台被管控
+     */
+    abstract checkIsConsoleCtrl (): boolean;
+    /**
+     * 打开控制台
+     */
+    abstract openConsole ();
 }
 
 export default MgrSdkCore;

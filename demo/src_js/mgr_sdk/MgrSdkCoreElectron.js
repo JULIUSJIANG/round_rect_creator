@@ -45,6 +45,12 @@ class MgrSdkCoreElectronRequest {
         code: 1003,
         analyse: null
     });
+    ;
+    ;
+    MgrSdkCoreElectronRequest.CLIENT_FETCH_OPEN_CONSOLE = new MgrSdkCoreElectronRequest({
+        code: 1004,
+        analyse: null
+    });
 })(MgrSdkCoreElectronRequest || (MgrSdkCoreElectronRequest = {}));
 NodeModules.electron.ipcRenderer.on(MgrSdkCoreElectronRequest.EVT_NAME_SERVER_ACTIVE, (evt, args) => {
     // 解析得到具体策略
@@ -156,6 +162,12 @@ class MgrSdkCoreElectron extends MgrSdkCore {
                 isSuccessed: true
             };
         });
+    }
+    checkIsConsoleCtrl() {
+        return true;
+    }
+    openConsole() {
+        this.fetch(MgrSdkCoreElectronRequest.CLIENT_FETCH_OPEN_CONSOLE, {});
     }
     /**
      * 告知服务端

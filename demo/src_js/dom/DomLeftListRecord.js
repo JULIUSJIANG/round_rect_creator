@@ -1,7 +1,7 @@
 import NodeModules from "../NodeModules.js";
 import MgrData from "../mgr_data/MgrData.js";
 import MgrDataItem from "../mgr_data/MgrDataItem.js";
-import DomLeftListRecordInput from "./DomLeftListRecordInput.js";
+import DomTextInput from "./DomTextInput.js";
 import DomDefine from "./DomDefine.js";
 /**
  * 左边栏 - 存档列表
@@ -35,7 +35,7 @@ class DomLeftListRecord extends NodeModules.react.Component {
                 propsDiv.style[DomDefine.STYLE_MARGIN_BOTTOM] = DomDefine.CONFIG_TXT_SPACING;
             }
             ;
-            listChildren.push(NodeModules.react.createElement(DomDefine.TAG_DIV, propsDiv, NodeModules.react.createElement(DomLeftListRecordInput, {
+            listChildren.push(NodeModules.react.createElement(DomDefine.TAG_DIV, propsDiv, NodeModules.react.createElement(DomTextInput, {
                 value: listRecordI.name,
                 onChange: (e) => {
                     listRecordI.name = e;

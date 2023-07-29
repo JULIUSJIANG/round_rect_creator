@@ -1,69 +1,44 @@
-import DomTextInput from "./DomTextInput.js";
-
 /**
  * 文本输入框 - 状态
  */
-abstract class DomTextInputStatus {
-    /**
-     * 归属的实体
-     */
-    relMachine: DomTextInput;
-
-    constructor (
-        domTextInput: DomTextInput
-    ) 
-    {
+class DomTextInputStatus {
+    constructor(domTextInput) {
         this.relMachine = domTextInput;
     }
-
     /**
      * 事件派发 - 进入状态
      */
-    onEnter () {
-
+    onEnter() {
     }
-
     /**
      * 事件派发 - 离开状态
      */
-    onExit () {
-
+    onExit() {
     }
-
     /**
      * 值发生变化
      */
-    onChange () {
-
+    onChange() {
     }
-
     /**
      * 画面需要刷新的时候
      */
-    onDidUpdate () {
-
+    onDidUpdate() {
     }
-
     /**
      * 事件派发 - 智能提示开始
      */
-    onCompositionStart () {
-
+    onCompositionStart() {
     }
-
     /**
      * 事件派发 - 智能提示更新
      */
-    onCompositionUpdate () {
-
+    onCompositionUpdate() {
     }
-
     /**
      * 事件派发 - 智能提示结束
      */
-    onCompositionEnd () {
-
+    onCompositionEnd() {
     }
 }
-
 export default DomTextInputStatus;

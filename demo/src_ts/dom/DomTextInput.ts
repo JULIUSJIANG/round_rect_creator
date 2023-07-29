@@ -1,5 +1,8 @@
 import NodeModules from "../NodeModules.js";
 import DomDefine from "./DomDefine.js";
+import DomTextInputStatus from "./DomTextInputStatus.js";
+import DomTextInputStatusIdle from "./DomTextInputStatusIdle.js";
+import DomTextInputStatusEditing from "./DomTextInputStatusEditing.js";
 
 /**
  * 文本输入框
@@ -7,55 +10,68 @@ import DomDefine from "./DomDefine.js";
  */
 class DomTextInput extends NodeModules.react.Component {
 
+    constructor (...args) {
+        super (...args);
+
+        this.statusIdle = new DomTextInputStatusIdle (this);
+        this.statusEditing = new DomTextInputStatusEditing (this);
+        this.enterStatus (this.statusIdle);
+    }
+
+    /**
+     * 状态 - 待机
+     */
+    statusIdle: DomTextInputStatusIdle;
+    /**
+     * 状态 - 中文智能提示中
+     */
+    statusEditing: DomTextInputStatusEditing;
+
+    /**
+     * 当前状态
+     */
+    currStatus: DomTextInputStatus;
+    /**
+     * 进入状态
+     * @param status 
+     */
+    enterStatus (status: DomTextInputStatus) {
+        let rec = this.currStatus;
+        this.currStatus = status;
+        if (rec) {
+            rec.onExit ();
+        };
+        this.currStatus.onEnter ();
+    }
+
     /**
      * 实体的引用
      */
     inputRef = NodeModules.react.createRef();
 
-    /**
-     * 智能提示中
-     */
-    isOnComposition = false;
-
     componentDidMount () {
-        this.setInputValue();
-        this.inputRef.current.onkeydown = this.onKeyDown;
+        this.componentDidUpdate ();
     }
 
     componentDidUpdate () {
-        this.setInputValue();
+        this.currStatus.onDidUpdate ();
     }
-
-    setInputValue = () => {
-        let val = this.props.value || '';
-        this.inputRef.current.value = val;
-    };
-
-    handleComposition = evt => {
-        if (evt.type === 'compositionend') {
-            this.isOnComposition = false;
-            if (navigator.userAgent.indexOf('Chrome') > -1) {
-                this.onChange(evt);
-            };
-            return;
-        };
-
-        this.isOnComposition = true;
-    };
-
-    onChange = evt => {
-        if (!this.isOnComposition) {
-            this.props.onChange(evt.target.value);
-        };
-    };
 
     render() {
         const commonProps = {
-            onCompositionStart: this.handleComposition,
-            onCompositionUpdate: this.handleComposition,
-            onCompositionEnd: this.handleComposition,
+            onChange: () => {
+                this.currStatus.onChange ();
+            },
 
-            onChange: this.onChange,
+            onCompositionStart: () => {
+                this.currStatus.onCompositionStart ();
+            },
+            onCompositionUpdate: () => {
+                this.currStatus.onCompositionUpdate ();
+            },
+            onCompositionEnd: () => {
+                this.currStatus.onCompositionEnd ();
+            },
         };
         return NodeModules.react.createElement (
             DomDefine.TAG_INPUT,

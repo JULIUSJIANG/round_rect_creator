@@ -130,6 +130,20 @@ namespace MgrSdkCoreElectronRequest {
                 });
         }
     });
+
+    export interface ClientFetchOpenConsoleI {
+
+    };
+    export interface ClientFetchOpenConsoleO {
+
+    };
+    export const CLIENT_FETCH_OPEN_CONSOLE = new MgrSdkCoreElectronRequest <ClientFetchOpenConsoleI, ClientFetchOpenConsoleO> ({
+        code: 1004,
+        analyse: (ctx) => {
+            win.webContents.openDevTools ();
+            return Promise.resolve ({});
+        }
+    });
 }
 
 let win;
@@ -142,8 +156,8 @@ const createWindow = () => {
         }
     });
     win.maximize();
+    win.setMenu (null);
     win.loadFile (`./src_js/IndexWindow.html`);
-    win.webContents.openDevTools ();
 
     win.webContents.session.on (
         'will-download', 

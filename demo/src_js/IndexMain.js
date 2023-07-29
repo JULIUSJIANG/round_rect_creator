@@ -82,6 +82,15 @@ class MgrSdkCoreElectronRequest {
             });
         }
     });
+    ;
+    ;
+    MgrSdkCoreElectronRequest.CLIENT_FETCH_OPEN_CONSOLE = new MgrSdkCoreElectronRequest({
+        code: 1004,
+        analyse: (ctx) => {
+            win.webContents.openDevTools();
+            return Promise.resolve({});
+        }
+    });
 })(MgrSdkCoreElectronRequest || (MgrSdkCoreElectronRequest = {}));
 let win;
 let filePath;
@@ -93,8 +102,8 @@ const createWindow = () => {
         }
     });
     win.maximize();
+    win.setMenu(null);
     win.loadFile(`./src_js/IndexWindow.html`);
-    win.webContents.openDevTools();
     win.webContents.session.on('will-download', (event, item, webContents) => {
         if (!filePath) {
             return;

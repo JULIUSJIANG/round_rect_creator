@@ -97,6 +97,17 @@ namespace MgrSdkCoreElectronRequest {
         code: 1003,
         analyse: null
     });
+
+    export interface ClientFetchOpenConsoleI {
+
+    };
+    export interface ClientFetchOpenConsoleO {
+
+    };
+    export const CLIENT_FETCH_OPEN_CONSOLE = new MgrSdkCoreElectronRequest <ClientFetchOpenConsoleI, ClientFetchOpenConsoleO> ({
+        code: 1004,
+        analyse: null
+    });
 }
 
 NodeModules.electron.ipcRenderer.on (
@@ -234,6 +245,19 @@ class MgrSdkCoreElectron extends MgrSdkCore {
             });
     }
     
+    checkIsConsoleCtrl(): boolean {
+        return true;
+    }
+
+    openConsole() {
+        this.fetch (
+            MgrSdkCoreElectronRequest.CLIENT_FETCH_OPEN_CONSOLE,
+            {
+
+            }
+        );
+    }
+
     /**
      * 告知服务端
      * @param action 
