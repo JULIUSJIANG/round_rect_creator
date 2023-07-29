@@ -66,7 +66,6 @@ class c_request {
             ;
             return Promise.resolve()
                 .then(() => {
-                console.log(`选择文件路径...`);
                 return dialog.showSaveDialog(win, {
                     title: `另存为`,
                     filters,
@@ -74,7 +73,6 @@ class c_request {
                 });
             })
                 .then((result) => {
-                console.log(`保存文件...`);
                 file_path = result.filePath;
                 if (file_path) {
                     win.webContents.downloadURL(ctx.file_url);
@@ -98,7 +96,6 @@ const createWindow = () => {
     win.loadFile(`./src_js/c_index_client.html`);
     win.webContents.openDevTools();
     win.webContents.session.on('will-download', (event, item, webContents) => {
-        console.log(`call will-download...`, file_path);
         if (!file_path) {
             return;
         }
