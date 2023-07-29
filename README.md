@@ -8,9 +8,7 @@
 
 ## 目录说明
 * 工程目录 round_react_creator_electron 放置的是最原始的代码文件，框架为 NodeJS + React + Antd + Electron，用于发布桌面版本
-* 工程目录 round_react_creator_h5 是 round_react_creator_electron 剥离对 Electron 的依赖后，能够直接通过 React 发布 h5 的版本
-  
-  > （体验地址对应代码仓库的目录 round_react_creator_h5/build，是 h5 版本的发布）
+* 工程目录 round_react_creator_h5 是 round_react_creator_electron 剥离对 Electron 的依赖后，能够直接通过 React 发布 h5 的版本，体验地址对应代码仓库的目录 round_react_creator_h5/build，是 h5 版本的发布
 
 
 ## 注意事项
