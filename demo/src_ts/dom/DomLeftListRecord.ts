@@ -1,7 +1,7 @@
 import NodeModules from "../NodeModules.js";
 import MgrData from "../mgr_data/MgrData.js";
 import MgrDataItem from "../mgr_data/MgrDataItem.js";
-import DomLeftListRecordInput from "./DomLeftListRecordInput.js";
+import DomTextInput from "./DomTextInput.js";
 import DomDefine from "./DomDefine.js";
 
 /**
@@ -40,7 +40,7 @@ class DomLeftListRecord extends NodeModules.react.Component {
                 propsDiv,
 
                 NodeModules.react.createElement (
-                    DomLeftListRecordInput,
+                    DomTextInput,
                     {
                         value: listRecordI.name,
                         onChange: (e) => {

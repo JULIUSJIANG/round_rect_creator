@@ -1,11 +1,18 @@
 import NodeModules from "../NodeModules.js";
+import DomDefine from "./DomDefine.js";
 /**
  * 左边栏 - 存档列表 - 输入框
  */
 export default class DomLeftListRecordInput extends NodeModules.react.Component {
     constructor() {
         super(...arguments);
+        /**
+         * 实体的引用
+         */
         this.inputRef = NodeModules.react.createRef();
+        /**
+         * 智能提示中
+         */
         this.isOnComposition = false;
         this.setInputValue = () => {
             let val = this.props.value || '';
@@ -32,18 +39,19 @@ export default class DomLeftListRecordInput extends NodeModules.react.Component 
     }
     componentDidMount() {
         this.setInputValue();
+        this.inputRef.current.onkeydown = this.onKeyDown;
     }
     componentDidUpdate() {
         this.setInputValue();
     }
     render() {
         const commonProps = {
-            onChange: this.onChange,
             onCompositionStart: this.handleComposition,
             onCompositionUpdate: this.handleComposition,
             onCompositionEnd: this.handleComposition,
+            onChange: this.onChange,
         };
-        return NodeModules.react.createElement("input", {
+        return NodeModules.react.createElement(DomDefine.TAG_INPUT, {
             className: "ant-input css-dev-only-do-not-override-1jr9qlj",
             ref: this.inputRef,
             type: "text",

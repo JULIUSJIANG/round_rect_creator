@@ -3,7 +3,7 @@
  "list_reccord_19": [
   {
    "id": 2,
-   "name": "圆角矩形【2】",
+   "name": "圆角矩形【2】中文",
    "radiusLT": 50,
    "radiusRT": 50,
    "radiusLB": 50,
@@ -25,7 +25,7 @@
   },
   {
    "id": 3,
-   "name": "圆角矩形【3】",
+   "name": "圆角矩形【3】来啦中文",
    "radiusLT": 50,
    "radiusRT": 50,
    "radiusLB": 50,
@@ -38,10 +38,10 @@
    "minSizeHeight": 200,
    "color": "888888ff",
    "serration": 4,
-   "currentCode": 0,
+   "currentCode": 2,
    "code1LineWidth": 2,
    "code2FadeDistance": 25,
-   "code2SpeedOffset": 0.42,
+   "code2SpeedOffset": -0.01,
    "code3FadeDistance": 25,
    "code3SpeedOffset": 0
   }

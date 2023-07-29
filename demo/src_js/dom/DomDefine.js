@@ -8,6 +8,7 @@ class DomDefine {
     DomDefine.TAG_DIV = "div";
     DomDefine.TAG_CANVAS = "canvas";
     DomDefine.TAG_SPAN = "span";
+    DomDefine.TAG_INPUT = "input";
     //【样式名以及具体值】
     DomDefine.STYLE_WIDTH = "width";
     DomDefine.STYLE_WIDTH_PERCENTAGE_0 = "0%";

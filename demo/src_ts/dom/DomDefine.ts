@@ -10,6 +10,7 @@ namespace DomDefine {
     export const TAG_DIV = "div";
     export const TAG_CANVAS = "canvas";
     export const TAG_SPAN = "span";
+    export const TAG_INPUT = "input";
 
     //【样式名以及具体值】
     export const STYLE_WIDTH = "width";

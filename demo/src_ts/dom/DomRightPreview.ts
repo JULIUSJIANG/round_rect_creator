@@ -427,6 +427,7 @@ void main () {
         this.rrUCode3FadeDistance.Init (this.webglCtx, this.webglProgramRoundRect);
         this.rrUCode3Speed.Init (this.webglCtx, this.webglProgramRoundRect);
         this.rrVertexLocation = this.webglCtx.getAttribLocation (this.webglProgramRoundRect, this.rrAPosition.name);
+        // 注入顶点数据
         this.webglCtx.vertexAttribPointer (this.rrVertexLocation, 4, this.webglCtx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
         this.webglCtx.enableVertexAttribArray (this.rrVertexLocation);
 
@@ -471,6 +472,7 @@ void main () {
         this.imgUImgSize.Init (this.webglCtx, this.webglProgramImg);
         this.imgUImgTex.Init (this.webglCtx, this.webglProgramImg);
         this.imgVertexLocation = this.webglCtx.getAttribLocation (this.webglProgramImg, this.imgAPosition.name);
+        // 注入顶点数据
         this.webglCtx.vertexAttribPointer (this.imgVertexLocation, 4, this.webglCtx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
         this.webglCtx.enableVertexAttribArray (this.imgVertexLocation);
 
