@@ -5,7 +5,7 @@ const path = require (`path`);
 /**
  * 异步请求
  */
-class ActionRequest<TInput, TOutput> {
+class MgrSdkCoreElectronRequest<TInput, TOutput> {
     /**
      * 代号
      */
@@ -23,11 +23,11 @@ class ActionRequest<TInput, TOutput> {
         this.code = args.code;
         this.analyse = args.analyse;
 
-        ActionRequest.mapCodeToRequest.set (this.code, this);
+        MgrSdkCoreElectronRequest.mapCodeToRequest.set (this.code, this);
     }
 }
 
-namespace ActionRequest {
+namespace MgrSdkCoreElectronRequest {
     /**
      * 请求体
      */
@@ -54,7 +54,7 @@ namespace ActionRequest {
     /**
      * 代号到具体策略的映射
      */
-    export const mapCodeToRequest: Map <number, ActionRequest <unknown, unknown>> = new Map ();
+    export const mapCodeToRequest: Map <number, MgrSdkCoreElectronRequest <unknown, unknown>> = new Map ();
 
     export interface ClientFetchLogInput {
         txt: string
@@ -65,7 +65,7 @@ namespace ActionRequest {
     /**
      * 客户端通知 - 打印日志
      */
-    export const CLIENT_FETCH_LOG = new ActionRequest <ClientFetchLogInput, ClientFetchLogOutput> ({
+    export const CLIENT_FETCH_LOG = new MgrSdkCoreElectronRequest <ClientFetchLogInput, ClientFetchLogOutput> ({
         code: 1002,
         analyse: (ctx) => {
             console.log (ctx.txt);
@@ -86,7 +86,7 @@ namespace ActionRequest {
     export interface ClientFetchSaveOutput {
 
     };
-    export const client_fetch_save = new ActionRequest <ClientFetchSaveInput, ClientFetchSaveOutput> ({
+    export const client_fetch_save = new MgrSdkCoreElectronRequest <ClientFetchSaveInput, ClientFetchSaveOutput> ({
         code: 1003,
         analyse: (ctx) => {
             let filters = [
@@ -180,19 +180,19 @@ Promise.resolve ()
     });
 
 _electron.ipcMain.on (
-    ActionRequest.EVT_NAME_CLIENT_ACTIVE,
+    MgrSdkCoreElectronRequest.EVT_NAME_CLIENT_ACTIVE,
     (
         evt,
         args
     ) =>
     {
         // 解析得到具体策略
-        let action = ActionRequest.mapCodeToRequest.get (args.code);
+        let action = MgrSdkCoreElectronRequest.mapCodeToRequest.get (args.code);
         // 让策略处理
         action.analyse (args.data)
             .then ((resp) => {
                 // 返回最终结果
-                win.webContents.send (ActionRequest.EVT_NAME_CLIENT_ACTIVE, resp);
+                win.webContents.send (MgrSdkCoreElectronRequest.EVT_NAME_CLIENT_ACTIVE, resp);
     });
     }
 );
@@ -217,10 +217,10 @@ namespace IndexMain {
             code: action.code,
             data: i
         };
-        win.webContents.send (ActionRequest.EVT_NAME_SERVER_ACTIVE, msg);
+        win.webContents.send (MgrSdkCoreElectronRequest.EVT_NAME_SERVER_ACTIVE, msg);
         return new Promise <TOutput> ((resolve) => {
             _electron.ipcMain.once (
-                ActionRequest.EVT_NAME_SERVER_ACTIVE,
+                MgrSdkCoreElectronRequest.EVT_NAME_SERVER_ACTIVE,
                 (
                     evt,
                     resp: TOutput

@@ -1,9 +1,9 @@
 import NodeModules from "../NodeModules.js";
 import DomDefine from "./DomDefine.js";
-import UtilWebgl from "../util/UtilWebgl.js";
-import WebglCtxProps from "../util/WebglCtxProps.js";
-import WebglRSOrigin from "../util/WebglRSOrigin.js";
-import WebglRSType from "../util/WebglRSType.js";
+import UtilWebgl from "../webgl/UtilWebgl.js";
+import WebglCtxProps from "../webgl/WebglCtxProps.js";
+import WebglRSOrigin from "../webgl/WebglRSOrigin.js";
+import WebglRSType from "../webgl/WebglRSType.js";
 import IndexWindow from "../IndexWindow.js";
 
 /**

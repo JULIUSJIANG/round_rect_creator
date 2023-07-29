@@ -3,7 +3,7 @@ import NodeModules from "../NodeModules.js";
 import MgrData from "../mgr_data/MgrData.js";
 import MgrDataItem from "../mgr_data/MgrDataItem.js";
 import DomDefine from "./DomDefine.js";
-import ActionRequest from "../ActionRequest.js";
+import MgrSdk from "../mgr_sdk/MgrSdk.js";
 
 /**
  * 左边栏 - 行为按钮组
@@ -73,12 +73,9 @@ class DomLeftOperation extends NodeModules.react.Component {
                 {
                     onClick: () => {
                         let record = IndexWindow.getCurrentRecord ();
-                        IndexWindow.fetch (
-                            ActionRequest.CLIENT_FETCH_SAVE,
-                            {
-                                fileName: `${record.name}.png`,
-                                fileUrl: IndexWindow.dataUrl
-                            }
+                        MgrSdk.inst.core.saveFile (
+                            `${record.name}.png`,
+                            IndexWindow.dataUrl
                         );
                     },
                     style: {

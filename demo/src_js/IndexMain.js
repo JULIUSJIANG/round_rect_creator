@@ -4,33 +4,33 @@ const path = require(`path`);
 /**
  * 异步请求
  */
-class ActionRequest {
+class MgrSdkCoreElectronRequest {
     constructor(args) {
         this.code = args.code;
         this.analyse = args.analyse;
-        ActionRequest.mapCodeToRequest.set(this.code, this);
+        MgrSdkCoreElectronRequest.mapCodeToRequest.set(this.code, this);
     }
 }
-(function (ActionRequest) {
+(function (MgrSdkCoreElectronRequest) {
     ;
     /**
      * 服务端监听的事件名
      */
-    ActionRequest.EVT_NAME_SERVER_ACTIVE = `EVT_NAME_SERVER_ACTIVE`;
+    MgrSdkCoreElectronRequest.EVT_NAME_SERVER_ACTIVE = `EVT_NAME_SERVER_ACTIVE`;
     /**
      * 客户端监听的事件名
      */
-    ActionRequest.EVT_NAME_CLIENT_ACTIVE = `EVT_NAME_CLIENT_ACTIVE`;
+    MgrSdkCoreElectronRequest.EVT_NAME_CLIENT_ACTIVE = `EVT_NAME_CLIENT_ACTIVE`;
     /**
      * 代号到具体策略的映射
      */
-    ActionRequest.mapCodeToRequest = new Map();
+    MgrSdkCoreElectronRequest.mapCodeToRequest = new Map();
     ;
     ;
     /**
      * 客户端通知 - 打印日志
      */
-    ActionRequest.CLIENT_FETCH_LOG = new ActionRequest({
+    MgrSdkCoreElectronRequest.CLIENT_FETCH_LOG = new MgrSdkCoreElectronRequest({
         code: 1002,
         analyse: (ctx) => {
             console.log(ctx.txt);
@@ -39,7 +39,7 @@ class ActionRequest {
     });
     ;
     ;
-    ActionRequest.client_fetch_save = new ActionRequest({
+    MgrSdkCoreElectronRequest.client_fetch_save = new MgrSdkCoreElectronRequest({
         code: 1003,
         analyse: (ctx) => {
             let filters = [
@@ -82,7 +82,7 @@ class ActionRequest {
             });
         }
     });
-})(ActionRequest || (ActionRequest = {}));
+})(MgrSdkCoreElectronRequest || (MgrSdkCoreElectronRequest = {}));
 let win;
 let filePath;
 const createWindow = () => {
@@ -128,14 +128,14 @@ Promise.resolve()
         ;
     });
 });
-_electron.ipcMain.on(ActionRequest.EVT_NAME_CLIENT_ACTIVE, (evt, args) => {
+_electron.ipcMain.on(MgrSdkCoreElectronRequest.EVT_NAME_CLIENT_ACTIVE, (evt, args) => {
     // 解析得到具体策略
-    let action = ActionRequest.mapCodeToRequest.get(args.code);
+    let action = MgrSdkCoreElectronRequest.mapCodeToRequest.get(args.code);
     // 让策略处理
     action.analyse(args.data)
         .then((resp) => {
         // 返回最终结果
-        win.webContents.send(ActionRequest.EVT_NAME_CLIENT_ACTIVE, resp);
+        win.webContents.send(MgrSdkCoreElectronRequest.EVT_NAME_CLIENT_ACTIVE, resp);
     });
 });
 class IndexMain {
@@ -152,9 +152,9 @@ class IndexMain {
             code: action.code,
             data: i
         };
-        win.webContents.send(ActionRequest.EVT_NAME_SERVER_ACTIVE, msg);
+        win.webContents.send(MgrSdkCoreElectronRequest.EVT_NAME_SERVER_ACTIVE, msg);
         return new Promise((resolve) => {
-            _electron.ipcMain.once(ActionRequest.EVT_NAME_SERVER_ACTIVE, (evt, resp) => {
+            _electron.ipcMain.once(MgrSdkCoreElectronRequest.EVT_NAME_SERVER_ACTIVE, (evt, resp) => {
                 resolve(resp);
             });
         });

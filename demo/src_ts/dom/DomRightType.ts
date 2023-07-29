@@ -28,7 +28,7 @@ class DomRightType extends NodeModules.react.Component {
             };
             // 选中的模式得到高亮
             if (currentRecord.currentCode == listRSI.code) {
-                props ["type"] = "primary";
+                props [DomDefine.PROPS_TYPE] = DomDefine.PROPS_TYPE_PRIMARY;
             };
             listChildren.push (NodeModules.react.createElement (
                 NodeModules.antd.Button,

@@ -1,9 +1,7 @@
 import MgrData from "./mgr_data/MgrData.js";
 import DomRender from "./DomRender.js";
 import MgrSdk from "./mgr_sdk/MgrSdk.js";
-import NodeModules from "./NodeModules.js";
 import MgrDataItem from "./mgr_data/MgrDataItem.js";
-import ActionRequest from "./ActionRequest.js";
 Promise.resolve()
     // 等待文档加载成功
     .then(() => {
@@ -29,9 +27,7 @@ Promise.resolve()
     // 告知服务端已就绪
     .then(() => {
     // 跟服务端说，我已经就绪了
-    return IndexWindow.fetch(ActionRequest.CLIENT_FETCH_LOG, {
-        txt: `客户端就绪...`
-    });
+    return MgrSdk.inst.core.logToMain(`客户端就绪...`);
 })
     // 自动 update
     .then(() => {
@@ -42,9 +38,7 @@ Promise.resolve()
     ;
     // 关闭窗口时候自动存档一次
     window.addEventListener(`beforeunload`, () => {
-        IndexWindow.fetch(ActionRequest.CLIENT_FETCH_LOG, {
-            txt: `客户端关闭...`
-        });
+        MgrSdk.inst.core.logToMain(`客户端关闭...`);
         MgrData.inst.save();
     });
     // 上一帧数据版本
@@ -64,16 +58,6 @@ Promise.resolve()
         requestAnimationFrame(go);
     };
     requestAnimationFrame(go);
-});
-NodeModules.electron.ipcRenderer.on(ActionRequest.EVT_NAME_SERVER_ACTIVE, (evt, args) => {
-    // 解析得到具体策略
-    let action = ActionRequest.mapCodeToRequest.get(args.code);
-    // 让策略处理
-    action.analyse(args.data)
-        .then((resp) => {
-        // 返回最终结果
-        NodeModules.electron.ipcRenderer.send(ActionRequest.EVT_NAME_SERVER_ACTIVE, resp);
-    });
 });
 class IndexWindow {
 }
@@ -129,24 +113,6 @@ class IndexWindow {
         return currentRecord;
     }
     IndexWindow.getCurrentRecord = getCurrentRecord;
-    /**
-     * 告知服务端
-     * @param action
-     * @param i
-     */
-    function fetch(action, i) {
-        let msg = {
-            code: action.code,
-            data: i
-        };
-        NodeModules.electron.ipcRenderer.send(ActionRequest.EVT_NAME_CLIENT_ACTIVE, msg);
-        return new Promise((resolve) => {
-            NodeModules.electron.ipcRenderer.once(ActionRequest.EVT_NAME_CLIENT_ACTIVE, (evt, resp) => {
-                resolve(resp);
-            });
-        });
-    }
-    IndexWindow.fetch = fetch;
 })(IndexWindow || (IndexWindow = {}));
 ;
 export default IndexWindow;
