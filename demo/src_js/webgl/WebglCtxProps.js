@@ -22,7 +22,7 @@ class WebglCtxProps {
         this.origin.init(this);
     }
     /**
-     * 填充数据
+     * 填充数据，目前只考虑 uniform
      */
     fill(t) {
         this.origin.fill(this, t);

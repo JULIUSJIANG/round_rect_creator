@@ -57,7 +57,7 @@ class WebglCtxProps <T> {
     }
 
     /**
-     * 填充数据
+     * 填充数据，目前只考虑 uniform
      */
     fill (t: T) {
         this.origin.fill (this, t);

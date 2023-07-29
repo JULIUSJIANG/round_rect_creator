@@ -99,12 +99,24 @@ class DomRightPreview extends NodeModules.react.Component {
          * 纹理
          */
         this.imgUImgTex = new WebglCtxProps(`u_img_tex`, WebglRSOrigin.UNIFORM, WebglRSType.SAMPLER2D);
+        this._float32Array = new Float32Array(1);
+        this._uint8Array = new Uint8Array(1);
     }
     componentDidMount() {
         this.webglCanvas = this.webglCanvasRef.current;
         this.webglCtx = this.webglCanvas.getContext(`webgl`);
         this.d2Canvas = this.d2CanvasRef.current;
         this.d2Ctx = this.d2Canvas.getContext(`2d`);
+        // 初始化顶点数据，因为这里不用考虑变换，所以顶点数据从始至终都没有发生改变
+        let vertexData = new Float32Array([
+            1, 1, 0, 1,
+            1, -1, 0, 1,
+            -1, -1, 0, 1,
+            -1, 1, 0, 1
+        ]);
+        this.vertexBuffer = this.webglCtx.createBuffer();
+        this.webglCtx.bindBuffer(this.webglCtx.ARRAY_BUFFER, this.vertexBuffer);
+        this.webglCtx.bufferData(this.webglCtx.ARRAY_BUFFER, vertexData, this.webglCtx.STATIC_DRAW);
         this.webglProgramRoundRect = UtilWebgl.createProgram(this.webglCtx, `
 precision mediump float;
 ${this.rrAPosition.getTxtDefine()}
@@ -277,6 +289,8 @@ void main () {
         this.rrUCode3FadeDistance.Init(this.webglCtx, this.webglProgramRoundRect);
         this.rrUCode3Speed.Init(this.webglCtx, this.webglProgramRoundRect);
         this.rrVertexLocation = this.webglCtx.getAttribLocation(this.webglProgramRoundRect, this.rrAPosition.name);
+        this.webglCtx.vertexAttribPointer(this.rrVertexLocation, 4, this.webglCtx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
+        this.webglCtx.enableVertexAttribArray(this.rrVertexLocation);
         this.webglProgramImg = UtilWebgl.createProgram(this.webglCtx, `
 precision mediump float;
 ${this.imgAPosition.getTxtDefine()}
@@ -308,22 +322,15 @@ void main () {
     gl_FragColor = tex_color * judge_in_tex + vec4 (0.0, 0.0, 0.0, 0.0) * (1.0 - judge_in_tex);
 }
 `);
+        // 初始化参数
         this.imgUFileSize.Init(this.webglCtx, this.webglProgramImg);
         this.imgUImgPos.Init(this.webglCtx, this.webglProgramImg);
         this.imgUImgSize.Init(this.webglCtx, this.webglProgramImg);
         this.imgUImgTex.Init(this.webglCtx, this.webglProgramImg);
         this.imgVertexLocation = this.webglCtx.getAttribLocation(this.webglProgramImg, this.imgAPosition.name);
-        // 初始化顶点数据
-        let vertexData = new Float32Array([
-            1, 1, 0, 1,
-            1, -1, 0, 1,
-            -1, -1, 0, 1,
-            -1, 1, 0, 1
-        ]);
-        this.vertexBuffer = this.webglCtx.createBuffer();
-        this.webglCtx.bindBuffer(this.webglCtx.ARRAY_BUFFER, this.vertexBuffer);
-        this.webglCtx.bufferData(this.webglCtx.ARRAY_BUFFER, vertexData, this.webglCtx.STATIC_DRAW);
-        // 初始化网格数据
+        this.webglCtx.vertexAttribPointer(this.imgVertexLocation, 4, this.webglCtx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
+        this.webglCtx.enableVertexAttribArray(this.imgVertexLocation);
+        // 初始化网格数据，从始至终不会变化
         let meshData = new Uint8Array([
             0, 1, 2,
             0, 2, 3
@@ -331,17 +338,76 @@ void main () {
         let meshBuffer = this.webglCtx.createBuffer();
         this.webglCtx.bindBuffer(this.webglCtx.ELEMENT_ARRAY_BUFFER, meshBuffer);
         this.webglCtx.bufferData(this.webglCtx.ELEMENT_ARRAY_BUFFER, meshData, this.webglCtx.STATIC_DRAW);
-        this.bigImgRt = this.webglCtx.createTexture();
+        // 附加外边距前的 rt，不知道为何，设置为 LINEAR 取样的时候，该 RT 不再显示，否则就不用自己逐像素抗锯齿了
+        this.bigImgRT = this.webglCtx.createTexture();
         this.webglCtx.activeTexture(this.webglCtx.TEXTURE0);
-        this.webglCtx.bindTexture(this.webglCtx.TEXTURE_2D, this.bigImgRt);
+        this.webglCtx.bindTexture(this.webglCtx.TEXTURE_2D, this.bigImgRT);
         this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_MIN_FILTER, this.webglCtx.NEAREST);
         this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_MAG_FILTER, this.webglCtx.NEAREST);
         this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_WRAP_S, this.webglCtx.CLAMP_TO_EDGE);
         this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_WRAP_T, this.webglCtx.CLAMP_TO_EDGE);
         this.bigImgFbo = this.webglCtx.createFramebuffer();
         this.webglCtx.bindFramebuffer(this.webglCtx.FRAMEBUFFER, this.bigImgFbo);
-        this.webglCtx.framebufferTexture2D(this.webglCtx.FRAMEBUFFER, this.webglCtx.COLOR_ATTACHMENT0, this.webglCtx.TEXTURE_2D, this.bigImgRt, 0);
+        this.webglCtx.framebufferTexture2D(this.webglCtx.FRAMEBUFFER, this.webglCtx.COLOR_ATTACHMENT0, this.webglCtx.TEXTURE_2D, this.bigImgRT, 0);
+        // 抗锯齿前屏幕的 rt
+        this.screenRT = this.webglCtx.createTexture();
+        this.webglCtx.activeTexture(this.webglCtx.TEXTURE1);
+        this.webglCtx.bindTexture(this.webglCtx.TEXTURE_2D, this.screenRT);
+        this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_MIN_FILTER, this.webglCtx.NEAREST);
+        this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_MAG_FILTER, this.webglCtx.NEAREST);
+        this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_WRAP_S, this.webglCtx.CLAMP_TO_EDGE);
+        this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_WRAP_T, this.webglCtx.CLAMP_TO_EDGE);
+        this.screenFbo = this.webglCtx.createFramebuffer();
+        this.webglCtx.bindFramebuffer(this.webglCtx.FRAMEBUFFER, this.screenFbo);
+        this.webglCtx.framebufferTexture2D(this.webglCtx.FRAMEBUFFER, this.webglCtx.COLOR_ATTACHMENT0, this.webglCtx.TEXTURE_2D, this.screenRT, 0);
+        // 开启透明度混合
+        this.webglCtx.blendFunc(this.webglCtx.SRC_ALPHA, this.webglCtx.ONE_MINUS_SRC_ALPHA);
+        this.webglCtx.enable(this.webglCtx.BLEND);
         this.componentDidUpdate();
+    }
+    /**
+     * 获取尺寸够 length 的 32 位浮点数组
+     * @param length
+     * @returns
+     */
+    getFloat32Array(length) {
+        // 长度不够的话，扩容到够位置
+        if (this._float32Array.length < length) {
+            let size = this._float32Array.length;
+            // 每次增大，尺寸起码翻倍
+            while (size < length) {
+                size *= 2;
+            }
+            ;
+            this._float32Array = new Float32Array(size);
+        }
+        ;
+        return this._float32Array;
+    }
+    /**
+     * 获取尺寸够 length 的 32 位浮点数组
+     * @param length
+     * @returns
+     */
+    getUint8Array(length) {
+        // 长度不够的话，重建
+        if (this._uint8Array.length != length) {
+            this._uint8Array = new Uint8Array(length);
+        }
+        ;
+        return this._uint8Array;
+    }
+    /**
+     * 根据尺寸获取图片数据
+     * @param w
+     * @param h
+     */
+    get2DImgData(w, h) {
+        if (this._imgData == null || this._imgData.width != w || this._imgData.height != h) {
+            this._imgData = this.d2Ctx.createImageData(w, h);
+        }
+        ;
+        return this._imgData;
     }
     componentDidUpdate() {
         let record = IndexWindow.getCurrentRecord();
@@ -370,57 +436,40 @@ void main () {
         this.rrUCode2Speed.fill(record.code2SpeedOffset);
         this.rrUCode3FadeDistance.fill(record.code3FadeDistance);
         this.rrUCode3Speed.fill(record.code3SpeedOffset);
-        this.webglCtx.bindBuffer(this.webglCtx.ARRAY_BUFFER, this.vertexBuffer);
-        this.webglCtx.vertexAttribPointer(this.rrVertexLocation, 4, this.webglCtx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
-        this.webglCtx.enableVertexAttribArray(this.rrVertexLocation);
+        // 表明在操作的是 0 位纹理
         this.webglCtx.activeTexture(this.webglCtx.TEXTURE0);
-        this.webglCtx.bindTexture(this.webglCtx.TEXTURE_2D, this.bigImgRt);
+        this.webglCtx.bindTexture(this.webglCtx.TEXTURE_2D, this.bigImgRT);
         this.webglCtx.texImage2D(this.webglCtx.TEXTURE_2D, 0, this.webglCtx.RGBA, serrationWidth, serrationHeight, 0, this.webglCtx.RGBA, this.webglCtx.getExtension('OES_texture_half_float').HALF_FLOAT_OES, null);
         this.webglCtx.bindFramebuffer(this.webglCtx.FRAMEBUFFER, this.bigImgFbo);
-        this.webglCtx.framebufferTexture2D(this.webglCtx.FRAMEBUFFER, this.webglCtx.COLOR_ATTACHMENT0, this.webglCtx.TEXTURE_2D, this.bigImgRt, 0);
-        this.webglCtx.blendFunc(this.webglCtx.SRC_ALPHA, this.webglCtx.ONE_MINUS_SRC_ALPHA);
-        this.webglCtx.enable(this.webglCtx.BLEND);
         this.webglCtx.viewport(0, 0, serrationWidth, serrationHeight);
         this.webglCtx.clear(this.webglCtx.COLOR_BUFFER_BIT);
         this.webglCtx.drawElements(this.webglCtx.TRIANGLES, 6, this.webglCtx.UNSIGNED_BYTE, 0);
-        // 把帧缓冲区绘制到屏幕
+        // 绘制抗锯齿前的图像
+        this.webglCtx.useProgram(this.webglProgramImg);
+        this.imgUFileSize.fill([withMarginWidth, withMarginHeight]);
+        this.imgUImgPos.fill([record.marginLeft * record.serration, record.marginBottom * record.serration]);
+        this.imgUImgSize.fill([serrationWidth, serrationHeight]);
+        this.imgUImgTex.fill(0);
         let draw = (target) => {
-            this.webglCtx.useProgram(this.webglProgramImg);
-            this.imgUFileSize.fill([withMarginWidth, withMarginHeight]);
-            this.imgUImgPos.fill([record.marginLeft * record.serration, record.marginBottom * record.serration]);
-            this.imgUImgSize.fill([serrationWidth, serrationHeight]);
-            this.imgUImgTex.fill(0);
-            this.webglCtx.bindBuffer(this.webglCtx.ARRAY_BUFFER, this.vertexBuffer);
-            this.webglCtx.vertexAttribPointer(this.imgVertexLocation, 4, this.webglCtx.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 4, 0);
-            this.webglCtx.enableVertexAttribArray(this.imgVertexLocation);
-            this.webglCtx.blendFunc(this.webglCtx.SRC_ALPHA, this.webglCtx.ONE_MINUS_SRC_ALPHA);
-            this.webglCtx.enable(this.webglCtx.BLEND);
             this.webglCtx.bindFramebuffer(this.webglCtx.FRAMEBUFFER, target);
             this.webglCtx.viewport(0, 0, withMarginWidth, withMarginHeight);
             this.webglCtx.clear(this.webglCtx.COLOR_BUFFER_BIT);
             this.webglCtx.drawElements(this.webglCtx.TRIANGLES, 6, this.webglCtx.UNSIGNED_BYTE, 0);
         };
+        // 绘制到屏幕
         draw(null);
-        // 克隆屏幕内容
-        let screenTex = this.webglCtx.createTexture();
         this.webglCtx.activeTexture(this.webglCtx.TEXTURE1);
-        this.webglCtx.bindTexture(this.webglCtx.TEXTURE_2D, screenTex);
-        this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_MIN_FILTER, this.webglCtx.NEAREST);
-        this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_MAG_FILTER, this.webglCtx.NEAREST);
-        this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_WRAP_S, this.webglCtx.CLAMP_TO_EDGE);
-        this.webglCtx.texParameteri(this.webglCtx.TEXTURE_2D, this.webglCtx.TEXTURE_WRAP_T, this.webglCtx.CLAMP_TO_EDGE);
-        let fboTextureType = this.webglCtx.getExtension('OES_texture_half_float').HALF_FLOAT_OES;
-        this.webglCtx.texImage2D(this.webglCtx.TEXTURE_2D, 0, this.webglCtx.RGBA, withMarginWidth, withMarginHeight, 0, this.webglCtx.RGBA, fboTextureType, null);
-        // 帧缓冲区
-        let fbo = this.webglCtx.createFramebuffer();
-        this.webglCtx.bindFramebuffer(this.webglCtx.FRAMEBUFFER, fbo);
-        this.webglCtx.framebufferTexture2D(this.webglCtx.FRAMEBUFFER, this.webglCtx.COLOR_ATTACHMENT0, this.webglCtx.TEXTURE_2D, screenTex, 0);
-        draw(fbo);
+        this.webglCtx.bindTexture(this.webglCtx.TEXTURE_2D, this.screenRT);
+        this.webglCtx.texImage2D(this.webglCtx.TEXTURE_2D, 0, this.webglCtx.RGBA, withMarginWidth, withMarginHeight, 0, this.webglCtx.RGBA, this.webglCtx.getExtension('OES_texture_half_float').HALF_FLOAT_OES, null);
+        // 绘制到帧缓冲区
+        draw(this.screenFbo);
         // 保存帧缓冲区的数据
-        let fboDataFloat = new Float32Array(serrationWidth * serrationHeight * 4);
-        this.webglCtx.bindFramebuffer(this.webglCtx.FRAMEBUFFER, fbo);
+        let fboDataFloat = this.getFloat32Array(serrationWidth * serrationHeight * 4);
+        // 从帧缓冲区中读取到图像数据
         this.webglCtx.readPixels(0, 0, serrationWidth, serrationHeight, this.webglCtx.RGBA, this.webglCtx.FLOAT, fboDataFloat);
-        let fboDataUint = new Uint8Array(fileWidth * fileHeight * 4);
+        let fboDataUint = this.getUint8Array(fileWidth * fileHeight * 4);
+        let offset = fboDataUint.length - fileWidth * fileHeight * 4;
+        offset = -offset;
         let r, g, b, a;
         let serrationVolume = record.serration ** 2;
         for (let x = 0; x < fileWidth; x++) {
@@ -438,20 +487,23 @@ void main () {
                 }
                 ;
                 let idxTarget = (y * fileWidth + x) * 4;
-                fboDataUint[idxTarget + 0] = listColor[0] * 255;
-                fboDataUint[idxTarget + 1] = listColor[1] * 255;
-                fboDataUint[idxTarget + 2] = listColor[2] * 255;
-                fboDataUint[idxTarget + 3] = a / serrationVolume * 255;
+                // r、g、b 直接设置为目标值，否则图片边缘因为与黑色发生插值而变暗
+                fboDataUint[offset + idxTarget + 0] = listColor[0] * 255;
+                fboDataUint[offset + idxTarget + 1] = listColor[1] * 255;
+                fboDataUint[offset + idxTarget + 2] = listColor[2] * 255;
+                fboDataUint[offset + idxTarget + 3] = a / serrationVolume * 255;
             }
             ;
         }
         ;
-        let imgData = this.d2Ctx.createImageData(fileWidth, fileHeight);
-        imgData.data.set(fboDataUint);
+        // 构造 2d 数据
+        let imgData = this.get2DImgData(fileWidth, fileHeight);
+        imgData.data.set(fboDataUint, offset);
         this.d2Canvas.width = fileWidth;
         this.d2Canvas.height = fileHeight;
         this.d2Ctx.clearRect(0, 0, fileWidth, fileHeight);
         this.d2Ctx.putImageData(imgData, 0, 0);
+        // 记录当前 canvas 2d 的 base64 数据（绕这么大个圈都不直接取 canvas webgl 的数据，是因为 canvas webgl 的数据不稳定，从中导出的数据可能是一张全黑的图）
         IndexWindow.dataUrl = this.d2Canvas.toDataURL('image/png', 1);
     }
     render() {
